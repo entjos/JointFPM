@@ -21,6 +21,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Imports:
   rstpm2 (>= 1.5.2),
+  survival (>= 3.2-13),
   data.table (>= 1.14.2)
 Depends:
   R (>= 4.0)
