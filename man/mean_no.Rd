@@ -7,8 +7,8 @@
 mean_no(formula, re_indicator, ce_indicator, data)
 }
 \arguments{
-\item{formula}{A formula passed to `survfit`. The formula needs to be of form 
-`Surv() ~ 1`, where `Surv()` need to be of `type == 'counting'`.}
+\item{formula}{A formula passed to \code{survfit}. The formula needs to be of form
+\code{Surv() ~ 1}, where \code{Surv()} need to be of \code{type == 'counting'}.}
 
 \item{re_indicator}{The name of a variable indicating that these rows in the dataset belongs
 to the risksets for the recurrent event.}
@@ -16,9 +16,13 @@ to the risksets for the recurrent event.}
 \item{ce_indicator}{The name of a variable indicating that these rows in the datasets belongs
 to the riskset for the competing event.}
 
-\item{data}{A `data.frame` in stacked format. The dataset needs to include one row
+\item{data}{A \code{data.frame} in stacked format. The dataset needs to include one row
 for the competing event and one row for each risk episode of the
 recurrent event}
+}
+\value{
+A \code{data.frame} including the estimated number of events \code{expn}
+at times \code{t}.
 }
 \description{
 Non-parametric estimation of mean number of events
