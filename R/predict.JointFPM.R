@@ -37,9 +37,11 @@
 #'      \item{`uci`: }{The upper confidence interval limit.}
 #'    }
 #'
+#' @import rstpm2
+#'
 #' @method predict JointFPM
 #'
-#' @export predict.JointFPM
+#' @export
 
 predict.JointFPM <- function(JointFPM,
                              type = "mean_no",

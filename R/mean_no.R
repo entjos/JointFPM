@@ -21,6 +21,8 @@
 #'    A `data.frame` including the estimated number of events `expn`
 #'    at times `t`.
 #'
+#' @import survival
+#'
 #' @export mean_no
 
 mean_no <- function(formula,

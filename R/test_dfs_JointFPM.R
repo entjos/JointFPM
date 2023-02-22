@@ -99,6 +99,8 @@
 #'    argument is specified a `list` of `data.frame`s with one `data.frame`
 #'    for each strata will be returned.
 #'
+#' @import rstpm2
+#'
 #' @export test_dfs_JointFPM
 
 test_dfs_JointFPM <- function(surv,

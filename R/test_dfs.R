@@ -35,6 +35,8 @@
 #'      \item{`aic`: }{The AIC value of the model fit,}
 #'      \item{`bic`: }{The BIC value of the model fit,}
 #'    }
+#'
+#' @import rstpm2
 
 
 test_dfs <- function(formula,

@@ -21,6 +21,8 @@
 #' @return
 #'    A numeric vector the same length as t including the estimates of the
 #'    derivative of E[N(t)].
+#'
+#' @import rstpm2
 
 predict_n <- function(obj,
                       t,
