@@ -97,6 +97,7 @@
 #'      }
 #'
 #' @importFrom data.table `:=`
+#' @import rstpm2
 #'
 #' @export JointFPM
 
@@ -113,8 +114,11 @@ JointFPM <- function(surv,
                      data){
 
   # Checks
-  stopifnot(grepl("type.*=.*counting"),
-            "The surv object needs to be of type counting.")
+  if(!grepl("type.*=.*counting", surv)){
+
+    stop("The surv object needs to be of type counting.")
+
+  }
 
   # Prepare data
   data <-  data.table::copy(data.table::as.data.table(data))
