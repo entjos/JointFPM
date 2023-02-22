@@ -22,15 +22,18 @@ JointFPM(
 \item{surv}{A \code{Surv} object as defined in the \code{survival} package passed in quotation
 marks. The \code{Surv} objects needs to be of \code{type ==  'counting'} with the
 following arguments:
-- \code{time}: Start of follow-up time for each event episode, i.e. usually
-0 for the competing event and the first occurrence of the recurrent
-event. For every subsequent event the follow-up can either be 0 if
-gap time is the underlying time scale or the time of the previous event
-if total time is the underlying time scale.
-- \code{time2}: End of follow-up, i.e. either occurrence of a terminal or
-recurrent event, or time of censoring,
-- \code{status}: Event indicator for both terminal and recurrent event.
-- \code{type}: Has to be \code{counting}.}
+\itemize{
+\item{\code{time}: }{Start of follow-up time for each event episode, i.e.
+usually 0 for the competing event and the first occurrence of the
+recurrent event. For every subsequent event the follow-up can either
+be 0 if gap time is the underlying time scale or the time of the
+previous event if total time is the underlying time scale.}
+\item{\code{time2}: }{End of follow-up, i.e. either occurrence of a terminal
+or recurrent event, or time of censoring.}
+\item{\code{status}: }{Event indicator for both terminal and recurrent
+event.}
+\item{\code{type}: }{Has to be \code{counting}.}
+}}
 
 \item{re_terms}{A character vector specifying the variables used  to model the recurrent
 event process. Please note that if you like to include interactions or
@@ -72,18 +75,28 @@ including the follow-up time and event indicator for the competing event
 and possibly multiple rows for each observation including the follow-up
 times and event indicator for the recurrent event, e.g.:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{id st_start  st_end event status
- 1      0      6.88     0      1
- 1      0      6.88     1      0
- 2      0      8.70     0      1
- 2      0      8.70     1      0
- 3      0     10        0      0
- 3      0      1.78     1      1
- 3      1.78   6.08     1      1
- 3      6.08  10        1      0
- 4      0      6.07     0      1
- 4      0      6.07     1      0
+\if{html}{\out{<div class="sourceCode">}}\preformatted{id st_start  st_end re status
+ 1      0      6.88  0      1
+ 1      0      6.88  1      0
+ 2      0      8.70  0      1
+ 2      0      8.70  1      0
+ 3      0     10     0      0
+ 3      0      1.78  1      1
+ 3      1.78   6.08  1      1
+ 3      6.08  10     1      0
+ 4      0      6.07  0      1
+ 4      0      6.07  1      0
 }\if{html}{\out{</div>}}}
+}
+\value{
+An object of class \code{JointFPM} with the follwing elements:
+\itemize{
+\item{\code{model}: }{The fitted FPM object,}
+\item{\code{re_terms}: }{The terms used to model the recurrent event model,}
+\item{\code{ce_terms}: }{The terms used to model the competing event model,}
+\item{\code{re_indicator}: }{The name of the indicator variable of the recurrent
+event}
+}
 }
 \description{
 Fits a joint flexible parametric survival model (FPM) for a recurrent and
