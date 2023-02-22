@@ -9,15 +9,18 @@
 #'    A `Surv` object as defined in the `survival` package passed in quotation
 #'    marks. The `Surv` objects needs to be of `type ==  'counting'` with the
 #'    following arguments:
-#'      - `time`: Start of follow-up time for each event episode, i.e. usually
-#'      0 for the competing event and the first occurrence of the recurrent
-#'      event. For every subsequent event the follow-up can either be 0 if
-#'      gap time is the underlying time scale or the time of the previous event
-#'      if total time is the underlying time scale.
-#'      - `time2`: End of follow-up, i.e. either occurrence of a terminal or
-#'      recurrent event, or time of censoring,
-#'      - `status`: Event indicator for both terminal and recurrent event.
-#'      - `type`: Has to be `counting`.
+#'    \itemize{
+#'      \item{`time`: }{Start of follow-up time for each event episode, i.e.
+#'      usually 0 for the competing event and the first occurrence of the
+#'      recurrent event. For every subsequent event the follow-up can either
+#'      be 0 if gap time is the underlying time scale or the time of the
+#'      previous event if total time is the underlying time scale.}
+#'      \item{`time2`: }{End of follow-up, i.e. either occurrence of a terminal
+#'      or recurrent event, or time of censoring.}
+#'      \item{`status`: }{Event indicator for both terminal and recurrent
+#'      event.}
+#'      \item{`type`: }{Has to be `counting`.}
+#'    }
 #'
 #' @param re_terms
 #'    A character vector specifying the variables used  to model the recurrent
@@ -70,18 +73,29 @@
 #'    times and event indicator for the recurrent event, e.g.:
 #'
 #'    ```
-#'    id st_start  st_end event status
-#'     1      0      6.88     0      1
-#'     1      0      6.88     1      0
-#'     2      0      8.70     0      1
-#'     2      0      8.70     1      0
-#'     3      0     10        0      0
-#'     3      0      1.78     1      1
-#'     3      1.78   6.08     1      1
-#'     3      6.08  10        1      0
-#'     4      0      6.07     0      1
-#'     4      0      6.07     1      0
+#'    id st_start  st_end re status
+#'     1      0      6.88  0      1
+#'     1      0      6.88  1      0
+#'     2      0      8.70  0      1
+#'     2      0      8.70  1      0
+#'     3      0     10     0      0
+#'     3      0      1.78  1      1
+#'     3      1.78   6.08  1      1
+#'     3      6.08  10     1      0
+#'     4      0      6.07  0      1
+#'     4      0      6.07  1      0
 #'    ```
+#'
+#' @return
+#'    An object of class `JointFPM` with the follwing elements:
+#'    \itemize{
+#'      \item{`model`: }{The fitted FPM object,}
+#'      \item{`re_terms`: }{The terms used to model the recurrent event model,}
+#'      \item{`ce_terms`: }{The terms used to model the competing event model,}
+#'      \item{`re_indicator`: }{The name of the indicator variable of the recurrent
+#'      event}
+#'      }
+#'
 #' @importFrom data.table `:=`
 #'
 #' @export JointFPM
