@@ -1,3 +1,9 @@
+---
+title: "README"
+format: gfm
+editor: visual
+---
+
 # Description
 
 This package includes functions for parametrically estimating the mean number of events in the presence of competing events. Researchers often disregard subsequent events in the competing risk setting although the event of interest might be of recurrent nature, e.g. heart attacks, strokes, complications etc.. One estimate of interest in this situation is the mean number of events in the presence of competing events, which can be estimated using the functions provided in this package.
