@@ -1,0 +1,93 @@
+# Description
+
+This package includes functions for parametrically estimating the mean number of events in the presence of competing events. Researchers often disregard subsequent events in the competing risk setting although the event of interest might be of recurrent nature, e.g. heart attacks, strokes, complications etc.. One estimate of interest in this situation is the mean number of events in the presence of competing events, which can be estimated using the functions provided in this package.
+
+The estimation of the mean number of events requires two steps:
+
+1. The user need to fit a joint flexible parametric model using `JointFPM()`.
+2. The fitted model object needs to be passed to `predict()` in order to estimate the mean number of events.
+
+Please note that this package is currently under development and might change throughout the process.
+
+# Installation
+For installing the package from GitHub please use
+
+```{R}
+remotes::install_github("entjos/JointFPM")
+```
+
+# Short Example
+
+We will use a dataset of bladder cancer recurrences for the following example. The dataset is included in the `{survival}` package and includes information on bladder cancer patients receiving three different treatments: placebo, Pyridoxine, and Thiotepa (cf. `help(survival::bladder1)`).In order to fit a joint FPM we first need to reshape the dataset into a stacked format, i.e. each observation needs to have one row for the competing event and possible multiple rows for the recurrent event. In the example below we use the `{data.table}` package for the data preparation.
+
+```{R}
+# Load packages
+library(JointFPM)
+library(data.table) # For data preparations
+
+# Load bladder cancer dataset from survival package
+bldr_df <- as.data.table(survival::bladder1)
+bldr_df <- bldr_df[, .(id, treatment, start, stop, status)]
+
+# Define dataset for competing event times
+bldr_ce <- bldr_df[, .SD[stop == max(stop)],
+                   by = id]
+
+bldr_ce[, `:=`(ce = 1,
+               re = 0,
+               event = as.numeric(status %in% 2:3),
+               start = 0)]
+
+# Define dataset for bladder cancer recurrences
+bldr_re <- bldr_df[,
+                   `:=`(ce = 0,
+                        re = 1,
+                        event = as.numeric(status == 1))]
+
+# Combine datasets into one stacked dataset
+
+bldr_stacked <- rbindlist(list(bldr_ce, bldr_re))
+
+bldr_stacked[, `:=`(pyridoxine = as.numeric(treatment == "pyridoxine"),
+                    thiotepa   = as.numeric(treatment == "thiotepa"))]
+
+bldr_stacked$stop[bldr_stacked$stop == 0] <- 1 # Add one day survival 
+
+# Print stacked dataset
+head(bldr_stacked)
+
+```
+
+The next step is to fir a joint flexible parametric model using the stacked dataset.
+
+```{R}
+bldr_model <- JointFPM("Surv(time  = start,
+                            time2  = stop, 
+                            event  = event,
+                            type   = 'counting')",
+                       re_terms = c("pyridoxine", "thiotepa"),
+                       ce_terms = c("pyridoxine", "thiotepa"),
+                       re_indicator = "re",
+                       ce_indicator = "ce",
+                       df_ce  = 3,
+                       tvc_re = 3,
+                       tvc_ce_terms = list(pyridoxine = 2,
+                                           thiotepa   = 2),
+                       tvc_re_terms = list(pyridoxine = 2,
+                                           thiotepa   = 2),
+                       cluster  = "id",
+                       data     = bldr_stacked)
+```
+
+Based on the model we can predict the mean number of events at different time points and covariate patterns.
+
+```{R}
+predict(bldr_model,
+        newdata = data.frame(pyridoxine = 1, 
+                             thiotepa   = 0),
+        t =  c(10, 20, 50))
+```
+
+# Bugs
+
+If you find any bugs or have any suggestion please don't hesitate to file an issue on GitHub.
