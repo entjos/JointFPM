@@ -1,5 +1,4 @@
 ---
-title: "README"
 format: gfm
 editor: visual
 ---
@@ -10,12 +9,13 @@ This package includes functions for parametrically estimating the mean number of
 
 The estimation of the mean number of events requires two steps:
 
-1. The user need to fit a joint flexible parametric model using `JointFPM()`.
-2. The fitted model object needs to be passed to `predict()` in order to estimate the mean number of events.
+1.  The user need to fit a joint flexible parametric model using `JointFPM()`.
+2.  The fitted model object needs to be passed to `predict()` in order to estimate the mean number of events.
 
 Please note that this package is currently under development and might change throughout the process.
 
 # Installation
+
 For installing the package from GitHub please use
 
 ```{R}

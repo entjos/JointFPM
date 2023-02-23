@@ -1,6 +1,3 @@
-README
-================
-
 # Description
 
 This package includes functions for parametrically estimating the mean
