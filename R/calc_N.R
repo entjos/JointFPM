@@ -27,7 +27,7 @@
 #' @return
 #'    A numeric vector of integral with the same length as t.
 
-calc_N <- function(obj, newdata, t, lambda_dta, st_dta, nodes){
+calc_N <- function(obj, t, lambda_dta, st_dta, nodes){
 
   N <- gaussian_quad(.f = function(x) predict_n(obj,
                                                 t = x,

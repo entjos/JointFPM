@@ -19,12 +19,12 @@
 #' @param t
 #'    A vector defining the time points for the prediction.
 #'
-#' @param gaussian_init_nodes
+#' @param gauss_init_nodes
 #'    Number of nodes used for the initial Gaussian quadrature approximation
 #'    of the integral (default = 50):
 #'    \deqn{E[N(t)] = \int_{0}^{t} S(t)\lambda(t)}
 #'
-#' @param gaussian_max_iter
+#' @param gauss_max_iter
 #'    The maximum number of iterations for the Gaussian quadrature
 #'    (default = 5).
 #'
@@ -47,78 +47,78 @@ predict.JointFPM <- function(JointFPM,
                              type = "mean_no",
                              newdata,
                              t,
-                             gaussian_init_nodes = 50,
-                             gaussian_max_iter            = 5 ){
+                             exposed,
+                             gauss_init_nodes = 50,
+                             gauss_max_nodes  = 5 ){
 
-  dta_re <- newdata[, colnames(newdata) %in% JointFPM$re_terms, drop = FALSE]
-  dta_ce <- newdata[, colnames(newdata) %in% JointFPM$ce_terms, drop = FALSE]
+  if(type == "mean_no"){
 
-  colnames(dta_re) <- paste0(colnames(dta_re), "_re")
-  colnames(dta_ce) <- paste0(colnames(dta_ce), "_ce")
+    tmp_newdata <- create_newdata(newdata,
+                                  re_term = JointFPM$re_terms,
+                                  ce_term = JointFPM$ce_terms)
 
-  tmp <- cbind(dta_re, dta_ce)
+    gauss_nodes <- gauss_test_cnvrgnc(JointFPM$model, t,
+                                      lambda_dta = tmp_newdata$lambda_dta,
+                                      st_dta     = tmp_newdata$st_dta,
+                                      gauss_init_nodes,
+                                      gauss_max_iter)
 
-  # Create dataset for predicting the intensity function
-  lambda_dta <- tmp * !grepl("_ce$", colnames(tmp))
+    # Use Delta Method to obtain confidence intervals for E[N]
+    est <- rstpm2::predictnl(JointFPM$model,
+                             fun = function(obj, ...){
 
-  # Creating dataset for predicting the survival function
-  st_dta <- tmp * !grepl("_re$", colnames(tmp))
+                               calc_N(obj, t,
+                                      lambda_dta = tmp_newdata$lambda_dta,
+                                      st_dta     = tmp_newdata$st_dta,
+                                      nodes      = gauss_nodes)
 
-  # Test convergence of Gaussian quadrature
-  N1 <- calc_N(JointFPM$model, newdata, t,
-               lambda_dta = lambda_dta,
-               st_dta     = st_dta,
-               nodes      = gaussian_init_nodes)
+                             })
 
-  tmp_nodes <- gaussian_init_nodes + 10
-
-  N2 <- calc_N(JointFPM$model, newdata, t,
-               lambda_dta = lambda_dta,
-               st_dta     = st_dta,
-               nodes      = tmp_nodes)
-
-  if (!identical(round(N1, 2), round(N2, 2))) {
-
-    cat("Starting iteration for Gaussian quadrature: ")
-
-    i <- 0
-
-    while(!identical(round(N1, 4), round(N2, 4))){
-
-      tmp_nodes <- tmp_nodes + 10
-
-      cat(tmp_nodes, ", ")
-
-      N1 <- N2
-
-      N2 <- calc_N(JointFPM$model, newdata, t,
-                   lambda_dta = lambda_dta,
-                   st_dta     = st_dta,
-                   nodes      = tmp_nodes)
-
-      i <- i + 1
-
-      if(i == gaussian_max_iter){
-        stop("Gaussian quadrature reached maximum no. of iterations without
-             success. Change the `max_iter` argument and try again.")
-      }
-    }
-    cat("\n")
   }
 
-  cat("Convergence criteria reached.\n")
+  if(type == "diff"){
 
-  # Use Delta Method to obtain confidence intervals for E[N]
-  est <- rstpm2::predictnl(JointFPM$model,
-                           newdata = newdata,
-                           fun = function(obj, newdata, ...){
+    newdata_e0 <- create_newdata(newdata,
+                                 re_term = JointFPM$re_terms,
+                                 ce_term = JointFPM$ce_terms)
 
-                             calc_N(obj, newdata, t,
-                                    lambda_dta = lambda_dta,
-                                    st_dta     = st_dta,
-                                    nodes      = tmp_nodes - 10)
+    newdata_e1 <- create_newdata(do.call(exposed, list(newdata)),
+                                 re_term = JointFPM$re_terms,
+                                 ce_term = JointFPM$ce_terms)
 
-                           })
+    gauss_nodes_e0 <- gauss_test_cnvrgnc(JointFPM$model, t,
+                                         lambda_dta = newdata_e0$lambda_dta,
+                                         st_dta     = newdata_e0$st_dta,
+                                         gauss_init_nodes,
+                                         gauss_max_iter)
+
+    gauss_nodes_e1 <- gauss_test_cnvrgnc(JointFPM$model, t,
+                                         lambda_dta = newdata_e1$lambda_dta,
+                                         st_dta     = newdata_e1$st_dta,
+                                         gauss_init_nodes,
+                                         gauss_max_iter)
+
+    # Use Delta Method to obtain confidence intervals for E[N]
+    est <- rstpm2::predictnl(JointFPM$model,
+                             fun = function(obj, ...){
+
+                               e0 <- calc_N(obj, t,
+                                            lambda_dta = newdata_e0$lambda_dta,
+                                            st_dta     = newdata_e0$st_dta,
+                                            nodes      = gauss_nodes_e0)
+
+                               e1 <- calc_N(obj, t,
+                                            lambda_dta = newdata_e1$lambda_dta,
+                                            st_dta     = newdata_e1$st_dta,
+                                            nodes      = gauss_nodes_e1)
+
+                               out <- e0-e1
+
+                               return(out)
+
+                             })
+
+  }
 
   cis <- rstpm2::confint.predictnl(est)
 
