@@ -19,12 +19,12 @@
 #' @param t
 #'    A vector defining the time points for the prediction.
 #'
-#' @param nodes_start
+#' @param gaussian_init_nodes
 #'    Number of nodes used for the initial Gaussian quadrature approximation
 #'    of the integral (default = 50):
 #'    \deqn{E[N(t)] = \int_{0}^{t} S(t)\lambda(t)}
 #'
-#' @param max_iter
+#' @param gaussian_max_iter
 #'    The maximum number of iterations for the Gaussian quadrature
 #'    (default = 5).
 #'
@@ -47,8 +47,8 @@ predict.JointFPM <- function(JointFPM,
                              type = "mean_no",
                              newdata,
                              t,
-                             nodes_start = 50,
-                             max_iter    = 5 ){
+                             gaussian_init_nodes = 50,
+                             gaussian_max_iter            = 5 ){
 
   dta_re <- newdata[, colnames(newdata) %in% JointFPM$re_terms, drop = FALSE]
   dta_ce <- newdata[, colnames(newdata) %in% JointFPM$ce_terms, drop = FALSE]
@@ -68,9 +68,9 @@ predict.JointFPM <- function(JointFPM,
   N1 <- calc_N(JointFPM$model, newdata, t,
                lambda_dta = lambda_dta,
                st_dta     = st_dta,
-               nodes      = nodes_start)
+               nodes      = gaussian_init_nodes)
 
-  tmp_nodes <- nodes_start + 10
+  tmp_nodes <- gaussian_init_nodes + 10
 
   N2 <- calc_N(JointFPM$model, newdata, t,
                lambda_dta = lambda_dta,
@@ -98,7 +98,7 @@ predict.JointFPM <- function(JointFPM,
 
       i <- i + 1
 
-      if(i == max_iter){
+      if(i == gaussian_max_iter){
         stop("Gaussian quadrature reached maximum no. of iterations without
              success. Change the `max_iter` argument and try again.")
       }
@@ -116,7 +116,7 @@ predict.JointFPM <- function(JointFPM,
                              calc_N(obj, newdata, t,
                                     lambda_dta = lambda_dta,
                                     st_dta     = st_dta,
-                                    nodes    = tmp_nodes - 10)
+                                    nodes      = tmp_nodes - 10)
 
                            })
 
