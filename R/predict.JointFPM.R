@@ -109,16 +109,16 @@ predict.JointFPM <- function(JointFPM,
   cat("Convergence criteria reached.\n")
 
   # Use Delta Method to obtain confidence intervals for E[N]
-  est <-rstpm2::predictnl(JointFPM$model,
-                          newdata = newdata,
-                          fun = function(obj, newdata, ...){
+  est <- rstpm2::predictnl(JointFPM$model,
+                           newdata = newdata,
+                           fun = function(obj, newdata, ...){
 
-                            calc_N(obj, newdata, t,
-                                   lambda_dta = lambda_dta,
-                                   st_dta     = st_dta,
-                                   nodes    = tmp_nodes - 10)
+                             calc_N(obj, newdata, t,
+                                    lambda_dta = lambda_dta,
+                                    st_dta     = st_dta,
+                                    nodes    = tmp_nodes - 10)
 
-                          })
+                           })
 
   cis <- rstpm2::confint.predictnl(est)
 
