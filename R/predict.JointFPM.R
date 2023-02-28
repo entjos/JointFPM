@@ -8,8 +8,13 @@
 #'    A joint flexible parametric model of class `JointFPM`.
 #'
 #' @param type
-#'    A character vector defining the estimant of interest. Currently the only
-#'    option for this is "mean_no" for the mean number of events.
+#'    A character vector defining the estimate of interest. Currently available
+#'    options are:
+#'    \itemize{
+#'       \item{`mean_no`: }{Estimates the mean number of events at time(s) `t`.}
+#'       \item{`diff`: }{Estimates the difference in mean number of events
+#'       between exposed and unexposed at time(s) `t`.}
+#'    }
 #'
 #' @param newdata
 #'    A `data.frame` including the variable parameters for the prediction. One
@@ -19,6 +24,11 @@
 #' @param t
 #'    A vector defining the time points for the prediction.
 #'
+#' @param exposed
+#'    A function that takes `newdata` as an argument and creates a new dataset
+#'    for the exposed group. This argument is required if `type = 'diff'`.
+#'    Please see details for more information.
+#'
 #' @param gauss_init_nodes
 #'    Number of nodes used for the initial Gaussian quadrature approximation
 #'    of the integral (default = 50):
@@ -27,6 +37,18 @@
 #' @param gauss_max_iter
 #'    The maximum number of iterations for the Gaussian quadrature
 #'    (default = 5).
+#'
+#' @details
+#'    The function required for the `exposed` argument must take the `newdata`
+#'    dataset as argument and transform it to a new dataset that defines the
+#'    exposed group. If we assume that we have a model with one variable `trt`,
+#'    which is a 0/1 coded treatment indicator. If we would like to obtain
+#'    the difference in mean number of events comparing untreated to treated
+#'    we could use the following function assuming that
+#'    `newdata = data.frame(trt = 0)`:
+#'    ```
+#'    function(x){transform(x, trt = 1)}
+#'    ```
 #'
 #' @return
 #'    A `data.frame` with the following columns:
