@@ -29,6 +29,10 @@
 #'    for the exposed group. This argument is required if `type = 'diff'`.
 #'    Please see details for more information.
 #'
+#' @param ci_fit
+#'    Logical indicator for whether confidence intervalls should be obtained
+#'    for the fitted estimated using the delta method.
+#'
 #' @param gauss_init_nodes
 #'    Number of nodes used for the initial Gaussian quadrature approximation
 #'    of the integral (default = 50):
@@ -70,8 +74,9 @@ predict.JointFPM <- function(JointFPM,
                              newdata,
                              t,
                              exposed,
+                             ci_fit = TRUE,
                              gauss_init_nodes = 50,
-                             gauss_max_nodes  = 5 ){
+                             gauss_max_iter   = 5){
 
   if(type == "mean_no"){
 
@@ -86,15 +91,28 @@ predict.JointFPM <- function(JointFPM,
                                       gauss_max_iter)
 
     # Use Delta Method to obtain confidence intervals for E[N]
-    est <- rstpm2::predictnl(JointFPM$model,
-                             fun = function(obj, ...){
 
-                               calc_N(obj, t,
-                                      lambda_dta = tmp_newdata$lambda_dta,
-                                      st_dta     = tmp_newdata$st_dta,
-                                      nodes      = gauss_nodes)
+    if(ci_fit){
 
-                             })
+      est <- rstpm2::predictnl(JointFPM$model,
+                               fun = function(obj, ...){
+
+                                 calc_N(obj, t,
+                                        lambda_dta = tmp_newdata$lambda_dta,
+                                        st_dta     = tmp_newdata$st_dta,
+                                        nodes      = gauss_nodes)
+
+                               })
+
+    } else {
+
+      est <- calc_N(JointFPM$model, t,
+                    lambda_dta = tmp_newdata$lambda_dta,
+                    st_dta     = tmp_newdata$st_dta,
+                    nodes      = gauss_nodes)
+
+    }
+
 
   }
 
@@ -121,33 +139,62 @@ predict.JointFPM <- function(JointFPM,
                                          gauss_max_iter)
 
     # Use Delta Method to obtain confidence intervals for E[N]
-    est <- rstpm2::predictnl(JointFPM$model,
-                             fun = function(obj, ...){
 
-                               e0 <- calc_N(obj, t,
-                                            lambda_dta = newdata_e0$lambda_dta,
-                                            st_dta     = newdata_e0$st_dta,
-                                            nodes      = gauss_nodes_e0)
+    if(ci_fir){
 
-                               e1 <- calc_N(obj, t,
-                                            lambda_dta = newdata_e1$lambda_dta,
-                                            st_dta     = newdata_e1$st_dta,
-                                            nodes      = gauss_nodes_e1)
+      e0 <- calc_N(JointFPM$model, t,
+                   lambda_dta = newdata_e0$lambda_dta,
+                   st_dta     = newdata_e0$st_dta,
+                   nodes      = gauss_nodes_e0)
 
-                               out <- e0-e1
+      e1 <- calc_N(JointFPM$model, t,
+                   lambda_dta = newdata_e1$lambda_dta,
+                   st_dta     = newdata_e1$st_dta,
+                   nodes      = gauss_nodes_e1)
 
-                               return(out)
+      est <- e0-e1
 
-                             })
+    } else {
+
+      est <- rstpm2::predictnl(JointFPM$model,
+                               fun = function(obj, ...){
+
+                                 e0 <- calc_N(obj, t,
+                                              lambda_dta = newdata_e0$lambda_dta,
+                                              st_dta     = newdata_e0$st_dta,
+                                              nodes      = gauss_nodes_e0)
+
+                                 e1 <- calc_N(obj, t,
+                                              lambda_dta = newdata_e1$lambda_dta,
+                                              st_dta     = newdata_e1$st_dta,
+                                              nodes      = gauss_nodes_e1)
+
+                                 out <- e0-e1
+
+                                 return(out)
+
+                               })
+
+    }
 
   }
 
-  cis <- rstpm2::confint.predictnl(est)
+  if(ci_fit){
 
-  out <- data.frame(t,
-                    fit = est$fit,
-                    lci = cis[, 1],
-                    uci = cis[, 2])
+    cis <- rstpm2::confint.predictnl(est)
+
+    out <- data.frame(t,
+                      fit = est$fit,
+                      lci = cis[, 1],
+                      uci = cis[, 2])
+
+  } else {
+
+    out <- data.frame(t,
+                      fit = est)
+
+  }
+
 
   colnames(out)[1] <- JointFPM$model@timeVar
 

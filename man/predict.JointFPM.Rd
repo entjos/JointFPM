@@ -10,6 +10,7 @@
   newdata,
   t,
   exposed,
+  ci_fit = TRUE,
   gauss_init_nodes = 50,
   gauss_max_nodes = 5
 )
@@ -34,6 +35,9 @@ model is requierd}
 \item{exposed}{A function that takes \code{newdata} as an argument and creates a new dataset
 for the exposed group. This argument is required if \code{type = 'diff'}.
 Please see details for more information.}
+
+\item{ci_fit}{Logical indicator for whether confidence intervalls should be obtained
+for the fitted estimated using the delta method.}
 
 \item{gauss_init_nodes}{Number of nodes used for the initial Gaussian quadrature approximation
 of the integral (default = 50):
