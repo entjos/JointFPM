@@ -161,6 +161,7 @@ JointFPM <- function(surv,
                        df      = df_ce,
                        tvc     = tvc,
                        cluster = data[[cluster]],
+                       robust  = TRUE,
                        data    = data)
 
   out <- list(model        = fpm,
