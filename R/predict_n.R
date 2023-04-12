@@ -46,6 +46,9 @@ predict_n <- function(obj,
                             type = "hazard",
                             newdata = lambda_dta)
 
+  # Setting lambda to 0 in case of negative prediction for the hazard
+  lambda <- ifelse(lambda <= 0, 0, lambda)
+
   # Calculate n
   n <- surv * lambda
 
