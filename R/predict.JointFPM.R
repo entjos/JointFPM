@@ -140,7 +140,7 @@ predict.JointFPM <- function(JointFPM,
 
     # Use Delta Method to obtain confidence intervals for E[N]
 
-    if(ci_fir){
+    if(ci_fit){
 
       e0 <- calc_N(JointFPM$model, t,
                    lambda_dta = newdata_e0$lambda_dta,
