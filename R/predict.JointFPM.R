@@ -142,20 +142,6 @@ predict.JointFPM <- function(JointFPM,
 
     if(ci_fit){
 
-      e0 <- calc_N(JointFPM$model, t,
-                   lambda_dta = newdata_e0$lambda_dta,
-                   st_dta     = newdata_e0$st_dta,
-                   nodes      = gauss_nodes_e0)
-
-      e1 <- calc_N(JointFPM$model, t,
-                   lambda_dta = newdata_e1$lambda_dta,
-                   st_dta     = newdata_e1$st_dta,
-                   nodes      = gauss_nodes_e1)
-
-      est <- e0-e1
-
-    } else {
-
       est <- rstpm2::predictnl(JointFPM$model,
                                fun = function(obj, ...){
 
@@ -175,6 +161,19 @@ predict.JointFPM <- function(JointFPM,
 
                                })
 
+    } else {
+
+      e0 <- calc_N(JointFPM$model, t,
+                   lambda_dta = newdata_e0$lambda_dta,
+                   st_dta     = newdata_e0$st_dta,
+                   nodes      = gauss_nodes_e0)
+
+      e1 <- calc_N(JointFPM$model, t,
+                   lambda_dta = newdata_e1$lambda_dta,
+                   st_dta     = newdata_e1$st_dta,
+                   nodes      = gauss_nodes_e1)
+
+      est <- e0-e1
     }
 
   }
