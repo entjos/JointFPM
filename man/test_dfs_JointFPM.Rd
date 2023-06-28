@@ -6,23 +6,21 @@
 \usage{
 test_dfs_JointFPM(
   surv,
-  re_terms,
-  ce_terms,
+  re_model,
+  ce_model,
   re_indicator,
   ce_indicator,
-  df_ce,
-  tvc_re,
+  dfs_ce,
+  dfs_re,
   tvc_re_terms = NULL,
   tvc_ce_terms = NULL,
   cluster,
-  data,
-  same_dfs_tvc = FALSE,
-  by_vars = NULL
+  data
 )
 }
 \arguments{
-\item{surv}{A \code{Surv} object as defined in the \code{survival} package passed in quotation
-marks. The \code{Surv} objects needs to be of \code{type ==  'counting'} with the
+\item{surv}{A formula of the following form \code{Surv(...) ~ 1}.
+The \code{Surv} objects needs to be of \code{type ==  'counting'} with the
 following arguments:
 \itemize{
 \item{\code{time}: }{Start of follow-up time for each event episode, i.e.
@@ -37,15 +35,11 @@ event.}
 \item{\code{type}: }{Has to be \code{counting}.}
 }}
 
-\item{re_terms}{A character vector specifying the variables used  to model the recurrent
-event process. Please note that if you like to include interactions or
-higher order terms plase do so by creating a new variable in your dataset
-and pass the variable afterwards to \code{re_terms}.}
+\item{re_model}{A formula object specifying the model for the recurrent event
+with an empty right hand side of the formula. E.g. \code{~ sex}.}
 
-\item{ce_terms}{A character vector specifying the variables used  to model the competing
-event process. Please note that if you like to include interactions or
-higher order terms plase do so by creating a new variable in your dataset
-and pass the variable afterwards to \code{ce_terms}.}
+\item{ce_model}{A formula object specifying the model for the competing event
+with an empty right hand side of the formula. E.g. \code{~ sex}.}
 
 \item{re_indicator}{Indicator that defined which rows in the dataset belong to the recurrent
 event process. These are usually more than one row per observations.
@@ -54,10 +48,10 @@ The variable name needs to be passed as a character vector.}
 \item{ce_indicator}{Indicator that defined which row in the dataset belong to the competing
 event process. The variable name needs to be passed as a character vector.}
 
-\item{df_ce}{Defines the number of knots used to model the baseline hazard function
+\item{dfs_ce}{Defines the number of knots used to model the baseline hazard function
 for the competing event process.}
 
-\item{tvc_re}{Defines the number of knots used to model the baseline hazard function
+\item{dfs_re}{Defines the number of knots used to model the baseline hazard function
 for the recurrent event process.}
 
 \item{tvc_re_terms}{A named list defining the numbers of knots used to model potential
@@ -89,15 +83,6 @@ times and event indicator for the recurrent event, e.g.:
  4      0      6.07  0      1
  4      0      6.07  1      0
 }\if{html}{\out{</div>}}}
-
-\item{same_dfs_tvc}{If \code{TRUE} no combinations of DFs between the different tvc variables will
-be tested. Instead only DFs from the minimum DF specified until the
-largest specified DF in \code{dfs_tvc} will be tested for all variables
-specified in \code{dfs_tvc} at the same time.}
-
-\item{by_vars}{A character vector of factor variable names used to fit stratified FPMs.
-One FPM will be fitted for each combination of factor levels specified.
-This is especially useful, when testing stratified FPMs.}
 }
 \value{
 A \code{data.frame} with one row per combination of baseline hazards

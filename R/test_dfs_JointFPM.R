@@ -3,8 +3,8 @@
 #' Test of degrees of freedom (DFs) joint flexible parametric survival models
 #'
 #' @param surv
-#'    A `Surv` object as defined in the `survival` package passed in quotation
-#'    marks. The `Surv` objects needs to be of `type ==  'counting'` with the
+#'    A formula of the following form `Surv(...) ~ 1`.
+#'    The `Surv` objects needs to be of `type ==  'counting'` with the
 #'    following arguments:
 #'    \itemize{
 #'      \item{`time`: }{Start of follow-up time for each event episode, i.e.
@@ -19,17 +19,13 @@
 #'      \item{`type`: }{Has to be `counting`.}
 #'    }
 #'
-#' @param re_terms
-#'    A character vector specifying the variables used  to model the recurrent
-#'    event process. Please note that if you like to include interactions or
-#'    higher order terms plase do so by creating a new variable in your dataset
-#'    and pass the variable afterwards to `re_terms`.
+#' @param re_model
+#'    A formula object specifying the model for the recurrent event
+#'    with an empty right hand side of the formula. E.g. `~ sex`.
 #'
-#' @param ce_terms
-#'    A character vector specifying the variables used  to model the competing
-#'    event process. Please note that if you like to include interactions or
-#'    higher order terms plase do so by creating a new variable in your dataset
-#'    and pass the variable afterwards to `ce_terms`.
+#' @param ce_model
+#'    A formula object specifying the model for the competing event
+#'    with an empty right hand side of the formula. E.g. `~ sex`.
 #'
 #' @param re_indicator
 #'    Indicator that defined which rows in the dataset belong to the recurrent
@@ -40,11 +36,11 @@
 #'    Indicator that defined which row in the dataset belong to the competing
 #'    event process. The variable name needs to be passed as a character vector.
 #'
-#' @param df_ce
+#' @param dfs_ce
 #'    Defines the number of knots used to model the baseline hazard function
 #'    for the competing event process.
 #'
-#' @param tvc_re
+#' @param dfs_re
 #'    Defines the number of knots used to model the baseline hazard function
 #'    for the recurrent event process.
 #'
@@ -82,16 +78,6 @@
 #'     4      0      6.07  0      1
 #'     4      0      6.07  1      0
 #'    ```
-#' @param by_vars
-#'    A character vector of factor variable names used to fit stratified FPMs.
-#'    One FPM will be fitted for each combination of factor levels specified.
-#'    This is especially useful, when testing stratified FPMs.
-#'
-#' @param same_dfs_tvc
-#'    If `TRUE` no combinations of DFs between the different tvc variables will
-#'    be tested. Instead only DFs from the minimum DF specified until the
-#'    largest specified DF in `dfs_tvc` will be tested for all variables
-#'    specified in `dfs_tvc` at the same time.
 #'
 #' @return
 #'    A `data.frame` with one row per combination of baseline hazards
@@ -104,82 +90,65 @@
 #' @export test_dfs_JointFPM
 
 test_dfs_JointFPM <- function(surv,
-                              re_terms,
-                              ce_terms,
+                              re_model,
+                              ce_model,
                               re_indicator,
                               ce_indicator,
-                              df_ce ,
-                              tvc_re,
+                              dfs_ce ,
+                              dfs_re,
                               tvc_re_terms = NULL,
                               tvc_ce_terms = NULL,
                               cluster,
-                              data,
-                              same_dfs_tvc = FALSE,
-                              by_vars = NULL){
+                              data){
 
   # Test model
   JointFPM_model <-
     JointFPM(surv,
-             re_terms,
-             ce_terms,
+             re_model,
+             ce_model,
              re_indicator,
              ce_indicator,
-             df_ce  = df_ce[[1]],
-             tvc_re = df_ce[[1]],
+             df_ce = dfs_ce[[1]],
+             df_re = dfs_re[[1]],
              tvc_re_terms = lapply(tvc_re_terms, function(x)`[[`(x, 1)),
              tvc_ce_terms = lapply(tvc_ce_terms, function(x)`[[`(x, 1)),
              cluster,
              data)
 
-  formula <- JointFPM_model$model@call.formula
-  data    <- as.data.frame(JointFPM_model$model@data)
+  # Create data frame of alls combinations for dfs of baseline hazard
+  # and tvc
+  tmp <- expand.grid(c(list(dfs_ce = dfs_ce,
+                            dfs_re = dfs_re),
+                       tvc_ce_terms,
+                       tvc_re_terms))
 
-  # Prepare tvc argument
-  if(!is.null(tvc_re_terms)){
+  # Test fit for different dfs
+  out <- lapply(
+    seq_len(nrow(tmp)),
+    function(i){
 
-    tvc_re_terms <- setNames(tvc_re_terms, paste0(names(tvc_re_terms), "_re"))
+      tvc_ce_terms <- as.list(tmp[i, 2 + seq_len(length(tvc_ce_terms)),
+                                  drop = FALSE])
+      tvc_re_terms <- as.list(tmp[i, 2 + length(tvc_ce_terms) +
+                                    seq_len(length(tvc_re_terms)),
+                                  drop = FALSE])
 
-  }
-
-  if(!is.null(tvc_ce_terms)){
-
-    tvc_ce_terms <- setNames(tvc_ce_terms, paste0(names(tvc_ce_terms), "_ce"))
-
-  }
-
-  dfs_tvc     <- c(list(re = tvc_re),
-                   tvc_re_terms,
-                   tvc_ce_terms)
-
-  # Check that tvc variables are icluded in dataset
-  if(!all(names(dfs_tvc) %in% colnames(data))){
-
-    stop("tvc variables need to be included in data")
-
-  }
-
-  if(is.null(by_vars)){
-
-    test_dfs(formula, dfs_bh = df_ce, dfs_tvc, same_dfs_tvc, cluster, data)
-
-    # Test DFs for stratified models
-  } else {
-
-    # If only one filter variables is selected
-    if(length(by_vars) == 1){
-
-      data$filter_vars <- data[, by_vars]
-
-      # For more than one filter variable
-    } else {
-
-      data$filter_vars <- do.call(paste, data[, by_vars])
-
+      test_df(surv,
+              re_model,
+              ce_model,
+              re_indicator,
+              ce_indicator,
+              df_ce = tmp$dfs_ce[[i]],
+              df_re = tmp$dfs_re[[i]],
+              tvc_ce_terms = tvc_ce_terms,
+              tvc_re_terms = tvc_re_terms,
+              cluster,
+              data)
     }
+  )
 
-    by(data,
-       data$filter_vars,
-       function(x) test_dfs(formula, dfs_bh = df_ce, dfs_tvc, same_dfs_tvc, x))
-  }
+  out <- do.call(rbind, out)
+
+  return(out)
 
 }
