@@ -4,11 +4,17 @@
 \alias{mean_no}
 \title{Non-parametric estimation of mean number of events}
 \usage{
-mean_no(formula, re_indicator, ce_indicator, data)
+mean_no(
+  formula,
+  re_indicator,
+  ce_indicator,
+  data,
+  re_control = list(),
+  ce_control = list()
+)
 }
 \arguments{
-\item{formula}{A formula passed to \code{survfit}. The formula needs to be of form
-\code{Surv() ~ 1}, where \code{Surv()} need to be of \code{type == 'counting'}.}
+\item{formula}{A formula passed to \code{survfit}.}
 
 \item{re_indicator}{The name of a variable indicating that these rows in the dataset belongs
 to the risksets for the recurrent event.}
@@ -19,10 +25,16 @@ to the riskset for the competing event.}
 \item{data}{A \code{data.frame} in stacked format. The dataset needs to include one row
 for the competing event and one row for each risk episode of the
 recurrent event}
+
+\item{re_control}{An optional \code{list} with arguments passed to \code{survfit} when computing
+risksets for the recurrent event.}
+
+\item{ce_control}{An optional \code{list} with arguments passed to \code{survfit} when computing
+risksets for the competing event.}
 }
 \value{
-A \code{data.frame} including the estimated number of events \code{expn}
-at times \code{t}.
+A \code{data.frame} including the estimated mean number of events \code{expn}
+at times \code{t} within strata \code{strata}.
 }
 \description{
 Non-parametric estimation of mean number of events

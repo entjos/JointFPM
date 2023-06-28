@@ -1,8 +1,7 @@
 #' Non-parametric estimation of mean number of events
 #'
 #' @param formula
-#'    A formula passed to `survfit`. The formula needs to be of form
-#'    `Surv() ~ 1`, where `Surv()` need to be of `type == 'counting'`.
+#'    A formula passed to `survfit`.
 #'
 #' @param re_indicator
 #'    The name of a variable indicating that these rows in the dataset belongs
@@ -26,8 +25,8 @@
 #'    risksets for the competing event.
 #'
 #' @return
-#'    A `data.frame` including the estimated number of events `expn`
-#'    at times `t`.
+#'    A `data.frame` including the estimated mean number of events `expn`
+#'    at times `t` within strata `strata`.
 #'
 #' @import survival
 #'
@@ -40,12 +39,17 @@ mean_no <- function(formula,
                     re_control = list(),
                     ce_control = list()){
 
-  # Define risk table for CB ---------------------------------------------------
+  # Define risktable for recurrent event ---------------------------------------
   re_control$formula <- formula
   re_control$data    <- data[data[[re_indicator]] == 1, ]
 
   risktab_re <- do.call(survival::survfit,
                         args = re_control)
+
+  risktab_re <- summary(risktab_re)
+  risktab_re <- lapply(c(2:4, 6, 10), function(x) risktab_re[x])
+  risktab_re <- do.call(data.frame, risktab_re)
+  data.table::setDT(risktab_re)
 
   # Define risk table for competing event --------------------------------------
   ce_control$formula <- formula
@@ -54,35 +58,42 @@ mean_no <- function(formula,
   risktab_ce <- do.call(survival::survfit,
                         args = ce_control)
 
+  risktab_ce <- summary(risktab_ce)
+  risktab_ce <- lapply(c(2:4, 6, 10), function(x) risktab_ce[x])
+  risktab_ce <- do.call(data.frame, risktab_ce)
+  data.table::setDT(risktab_ce)
+
   # Combine models -------------------------------------------------------------
-  re_df <- data.table::data.table(time = risktab_re$time,
-                                  na   = risktab_re$n.event / risktab_re$n.risk)
+  stratas <- unique(risktab_re$strata)
 
-  ce_df <- data.table::data.table(time = risktab_ce$time,
-                                  surv = risktab_ce$surv)
+  tmp <- lapply(stratas, function(x){
 
-  data.table::setkey(re_df, time)
-  data.table::setkey(ce_df, time)
+    re_df <- risktab_re[strata == x, .(time, na = n.event / n.risk)]
+    ce_df <- risktab_ce[strata == x, .(time, surv)]
 
-  unique_times <- unique(c(re_df$time), ce_df$time)
-  comb_df      <- re_df[ce_df[.(unique_times), on = "time"]]
+    comb_df <- merge(re_df,
+                     ce_df,
+                     by = "time",
+                     all = TRUE)
 
-  # Impute survival function
-  if(is.na(comb_df$surv[[1]])) {
+    # Impute survival function
+    if(is.na(comb_df$surv[[1]])) {
 
-    # Set survival to 1 at the beginning
-    comb_df$surv[[1]] <- 1
+      # Set survival to 1 at the beginning
+      comb_df$surv[[1]] <- 1
 
-  }
+    }
 
-  comb_df[, surv := data.table::nafill(surv, type = "locf")]
+    comb_df[, surv := data.table::nafill(surv, type = "locf")]
+    comb_df[, na   := data.table::nafill(na  , type = "const", fill = 0)]
 
-  # Estimate E[N(t)] -----------------------------------------------------------
-  comb_df[, expn := cumsum(surv * na)]
+    # Estimate E[N(t)] ---------------------------------------------------------
+    comb_df[, expn := cumsum(surv * na)]
+    comb_df[, strata := x]
+
+  })
 
   # Output ---------------------------------------------------------------------
-  out <- data.frame(t = comb_df$time, expn = comb_df$expn)
-
-  return(out)
+  out <- data.table::rbindlist(tmp)
 
 }
