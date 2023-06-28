@@ -30,10 +30,10 @@ predict_n <- function(obj,
                       st_dta){
 
   # Extend datasets for predicting different time points
-  lambda_dta <- cbind(lambda_dta, re = 1, t)
+  lambda_dta <- cbind(lambda_dta, t)
   colnames(lambda_dta)[ncol(lambda_dta)] <- obj@timeVar
 
-  st_dta <- cbind(st_dta, re = 0, t)
+  st_dta <- cbind(st_dta, t)
   colnames(st_dta)[ncol(st_dta)] <- obj@timeVar
 
   # Predict survival function

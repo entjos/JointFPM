@@ -11,8 +11,7 @@
   t,
   exposed,
   ci_fit = TRUE,
-  gauss_init_nodes = 50,
-  gauss_max_nodes = 5
+  gauss_nodes = 50
 )
 }
 \arguments{
@@ -39,12 +38,9 @@ Please see details for more information.}
 \item{ci_fit}{Logical indicator for whether confidence intervalls should be obtained
 for the fitted estimated using the delta method.}
 
-\item{gauss_init_nodes}{Number of nodes used for the initial Gaussian quadrature approximation
+\item{gauss_nodes}{Number of nodes used for the Gaussian quadrature approximation
 of the integral (default = 50):
 \deqn{E[N(t)] = \int_{0}^{t} S(t)\lambda(t)}}
-
-\item{gauss_max_iter}{The maximum number of iterations for the Gaussian quadrature
-(default = 5).}
 }
 \value{
 A \code{data.frame} with the following columns:

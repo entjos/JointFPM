@@ -33,14 +33,10 @@
 #'    Logical indicator for whether confidence intervalls should be obtained
 #'    for the fitted estimated using the delta method.
 #'
-#' @param gauss_init_nodes
-#'    Number of nodes used for the initial Gaussian quadrature approximation
+#' @param gauss_nodes
+#'    Number of nodes used for the Gaussian quadrature approximation
 #'    of the integral (default = 50):
 #'    \deqn{E[N(t)] = \int_{0}^{t} S(t)\lambda(t)}
-#'
-#' @param gauss_max_iter
-#'    The maximum number of iterations for the Gaussian quadrature
-#'    (default = 5).
 #'
 #' @details
 #'    The function required for the `exposed` argument must take the `newdata`
@@ -75,23 +71,23 @@ predict.JointFPM <- function(JointFPM,
                              t,
                              exposed,
                              ci_fit = TRUE,
-                             gauss_init_nodes = 50,
-                             gauss_max_iter   = 5){
+                             gauss_nodes = 50){
 
   if(type == "mean_no"){
 
-    tmp_newdata <- create_newdata(newdata,
-                                  re_term = JointFPM$re_terms,
-                                  ce_term = JointFPM$ce_terms)
+    tmp_newdata <- list()
 
-    gauss_nodes <- gauss_test_cnvrgnc(JointFPM$model, t,
-                                      lambda_dta = tmp_newdata$lambda_dta,
-                                      st_dta     = tmp_newdata$st_dta,
-                                      gauss_init_nodes,
-                                      gauss_max_iter)
+    tmp_newdata$st_dta <- cbind(newdata, 1, 0)
+    colnames(tmp_newdata$st_dta) <- c(names(newdata),
+                                      JointFPM$ce_indicator,
+                                      JointFPM$re_indicator)
+
+    tmp_newdata$lambda_dta <- cbind(newdata, 0, 1)
+    colnames(tmp_newdata$lambda_dta) <- c(names(newdata),
+                                          JointFPM$ce_indicator,
+                                          JointFPM$re_indicator)
 
     # Use Delta Method to obtain confidence intervals for E[N]
-
     if(ci_fit){
 
       est <- rstpm2::predictnl(JointFPM$model,
@@ -118,42 +114,37 @@ predict.JointFPM <- function(JointFPM,
 
   if(type == "diff"){
 
-    newdata_e0 <- create_newdata(newdata,
-                                 re_term = JointFPM$re_terms,
-                                 ce_term = JointFPM$ce_terms)
+    tmp_newdata_e0 <- list()
 
-    newdata_e1 <- create_newdata(do.call(exposed, list(newdata)),
-                                 re_term = JointFPM$re_terms,
-                                 ce_term = JointFPM$ce_terms)
+    tmp_newdata_e0$st_dta <- cbind(newdata, 1, 0)
+    colnames(tmp_newdata_e0$st_dta) <- c(names(newdata),
+                                         JointFPM$ce_indicator,
+                                         JointFPM$re_indicator)
 
-    gauss_nodes_e0 <- gauss_test_cnvrgnc(JointFPM$model, t,
-                                         lambda_dta = newdata_e0$lambda_dta,
-                                         st_dta     = newdata_e0$st_dta,
-                                         gauss_init_nodes,
-                                         gauss_max_iter)
+    tmp_newdata_e0$lambda_dta <- cbind(newdata, 0, 1)
+    colnames(tmp_newdata_e0$lambda_dta) <- c(names(newdata),
+                                             JointFPM$ce_indicator,
+                                             JointFPM$re_indicator)
 
-    gauss_nodes_e1 <- gauss_test_cnvrgnc(JointFPM$model, t,
-                                         lambda_dta = newdata_e1$lambda_dta,
-                                         st_dta     = newdata_e1$st_dta,
-                                         gauss_init_nodes,
-                                         gauss_max_iter)
+    tmp_newdata_e1 <- tmp_newdata_e0
+    tmp_newdata_e1$st_dta     <- do.call(exposed, list(tmp_newdata_e1$st_dta))
+    tmp_newdata_e1$lambda_dta <- do.call(exposed, list(tmp_newdata_e1$st_dta))
 
     # Use Delta Method to obtain confidence intervals for E[N]
-
     if(ci_fit){
 
       est <- rstpm2::predictnl(JointFPM$model,
                                fun = function(obj, ...){
 
                                  e0 <- calc_N(obj, t,
-                                              lambda_dta = newdata_e0$lambda_dta,
-                                              st_dta     = newdata_e0$st_dta,
-                                              nodes      = gauss_nodes_e0)
+                                              lambda_dta = tmp_newdata_e0$lambda_dta,
+                                              st_dta     = tmp_newdata_e0$st_dta,
+                                              nodes      = gauss_nodes)
 
                                  e1 <- calc_N(obj, t,
-                                              lambda_dta = newdata_e1$lambda_dta,
-                                              st_dta     = newdata_e1$st_dta,
-                                              nodes      = gauss_nodes_e1)
+                                              lambda_dta = tmp_newdata_e1$lambda_dta,
+                                              st_dta     = tmp_newdata_e1$st_dta,
+                                              nodes      = gauss_nodes)
 
                                  out <- e0-e1
 
@@ -164,14 +155,14 @@ predict.JointFPM <- function(JointFPM,
     } else {
 
       e0 <- calc_N(JointFPM$model, t,
-                   lambda_dta = newdata_e0$lambda_dta,
-                   st_dta     = newdata_e0$st_dta,
-                   nodes      = gauss_nodes_e0)
+                   lambda_dta = tmp_newdata_e0$lambda_dta,
+                   st_dta     = tmp_newdata_e0$st_dta,
+                   nodes      = gauss_nodes)
 
       e1 <- calc_N(JointFPM$model, t,
-                   lambda_dta = newdata_e1$lambda_dta,
-                   st_dta     = newdata_e1$st_dta,
-                   nodes      = gauss_nodes_e1)
+                   lambda_dta = tmp_newdata_e1$lambda_dta,
+                   st_dta     = tmp_newdata_e1$st_dta,
+                   nodes      = gauss_nodes)
 
       est <- e0-e1
     }
