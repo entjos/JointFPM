@@ -1,5 +1,8 @@
 #' Non-parametric estimation of mean number of events
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' @param formula
 #'    A formula passed to `survfit`.
 #'

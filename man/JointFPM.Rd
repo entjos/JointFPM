@@ -99,4 +99,6 @@ Fits a joint flexible parametric survival model (FPM) for a recurrent and
 terminal event. The joint model can be used to predict the mean number of
 events at different time points. This function is a wrapper around
 \code{rstpm2::stpm2()}.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

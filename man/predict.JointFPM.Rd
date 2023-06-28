@@ -55,6 +55,8 @@ A \code{data.frame} with the following columns:
 Predicts different estimates from a joint flexible parametric model.
 Currently only the estimation of the mean number of events at different
 time points is supported.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 The function required for the \code{exposed} argument must take the \code{newdata}

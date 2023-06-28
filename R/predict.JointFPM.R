@@ -1,8 +1,11 @@
 #' Post-estimation function for JointFPMs
 #'
+#' @description
 #' Predicts different estimates from a joint flexible parametric model.
 #' Currently only the estimation of the mean number of events at different
 #' time points is supported.
+#'
+#' `r lifecycle::badge("experimental")`
 #'
 #' @param JointFPM
 #'    A joint flexible parametric model of class `JointFPM`.

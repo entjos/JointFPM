@@ -37,5 +37,5 @@ A \code{data.frame} including the estimated mean number of events \code{expn}
 at times \code{t} within strata \code{strata}.
 }
 \description{
-Non-parametric estimation of mean number of events
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

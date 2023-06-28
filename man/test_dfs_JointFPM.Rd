@@ -92,4 +92,6 @@ for each strata will be returned.
 }
 \description{
 Test of degrees of freedom (DFs) joint flexible parametric survival models
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

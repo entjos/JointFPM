@@ -1,6 +1,9 @@
 #' Tests DFs for JointFPMs.
 #'
+#' @description
 #' Test of degrees of freedom (DFs) joint flexible parametric survival models
+#'
+#' `r lifecycle::badge("experimental")`
 #'
 #' @param surv
 #'    A formula of the following form `Surv(...) ~ 1`.

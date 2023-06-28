@@ -1,9 +1,12 @@
 #' Joint FPMs for recurrent and competing events.
 #'
+#' @description
 #' Fits a joint flexible parametric survival model (FPM) for a recurrent and
 #' terminal event. The joint model can be used to predict the mean number of
 #' events at different time points. This function is a wrapper around
 #' `rstpm2::stpm2()`.
+#'
+#' `r lifecycle::badge("experimental")`
 #'
 #' @param surv
 #'    A formula of the following form `Surv(...) ~ 1`.
