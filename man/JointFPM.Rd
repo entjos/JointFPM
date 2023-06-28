@@ -6,12 +6,12 @@
 \usage{
 JointFPM(
   surv,
-  re_terms,
-  ce_terms,
+  re_model,
+  ce_model,
   re_indicator,
   ce_indicator,
   df_ce = 3,
-  tvc_re = 3,
+  df_re = 3,
   tvc_re_terms = NULL,
   tvc_ce_terms = NULL,
   cluster,
@@ -19,8 +19,8 @@ JointFPM(
 )
 }
 \arguments{
-\item{surv}{A \code{Surv} object as defined in the \code{survival} package passed in quotation
-marks. The \code{Surv} objects needs to be of \code{type ==  'counting'} with the
+\item{surv}{A formula of the following form \code{Surv(...) ~ 1}.
+The \code{Surv} objects needs to be of \code{type ==  'counting'} with the
 following arguments:
 \itemize{
 \item{\code{time}: }{Start of follow-up time for each event episode, i.e.
@@ -35,15 +35,11 @@ event.}
 \item{\code{type}: }{Has to be \code{counting}.}
 }}
 
-\item{re_terms}{A character vector specifying the variables used  to model the recurrent
-event process. Please note that if you like to include interactions or
-higher order terms plase do so by creating a new variable in your dataset
-and pass the variable afterwards to \code{re_terms}.}
+\item{re_model}{A formula object specifying the model for the recurrent event
+with an empty right hand side of the formula. E.g. \code{~ sex}.}
 
-\item{ce_terms}{A character vector specifying the variables used  to model the competing
-event process. Please note that if you like to include interactions or
-higher order terms plase do so by creating a new variable in your dataset
-and pass the variable afterwards to \code{ce_terms}.}
+\item{ce_model}{A formula object specifying the model for the competing event
+with an empty right hand side of the formula. E.g. \code{~ sex}.}
 
 \item{re_indicator}{Indicator that defined which rows in the dataset belong to the recurrent
 event process. These are usually more than one row per observations.
@@ -55,7 +51,7 @@ event process. The variable name needs to be passed as a character vector.}
 \item{df_ce}{Defines the number of knots used to model the baseline hazard function
 for the competing event process.}
 
-\item{tvc_re}{Defines the number of knots used to model the baseline hazard function
+\item{df_re}{Defines the number of knots used to model the baseline hazard function
 for the recurrent event process.}
 
 \item{tvc_re_terms}{A named list defining the number of knots used to model potential

@@ -6,8 +6,8 @@
 #' `rstpm2::stpm2()`.
 #'
 #' @param surv
-#'    A `Surv` object as defined in the `survival` package passed in quotation
-#'    marks. The `Surv` objects needs to be of `type ==  'counting'` with the
+#'    A formula of the following form `Surv(...) ~ 1`.
+#'    The `Surv` objects needs to be of `type ==  'counting'` with the
 #'    following arguments:
 #'    \itemize{
 #'      \item{`time`: }{Start of follow-up time for each event episode, i.e.
@@ -22,17 +22,13 @@
 #'      \item{`type`: }{Has to be `counting`.}
 #'    }
 #'
-#' @param re_terms
-#'    A character vector specifying the variables used  to model the recurrent
-#'    event process. Please note that if you like to include interactions or
-#'    higher order terms plase do so by creating a new variable in your dataset
-#'    and pass the variable afterwards to `re_terms`.
+#' @param re_model
+#'    A formula object specifying the model for the recurrent event
+#'    with an empty right hand side of the formula. E.g. `~ sex`.
 #'
-#' @param ce_terms
-#'    A character vector specifying the variables used  to model the competing
-#'    event process. Please note that if you like to include interactions or
-#'    higher order terms plase do so by creating a new variable in your dataset
-#'    and pass the variable afterwards to `ce_terms`.
+#' @param ce_model
+#'    A formula object specifying the model for the competing event
+#'    with an empty right hand side of the formula. E.g. `~ sex`.
 #'
 #' @param re_indicator
 #'    Indicator that defined which rows in the dataset belong to the recurrent
@@ -47,7 +43,7 @@
 #'    Defines the number of knots used to model the baseline hazard function
 #'    for the competing event process.
 #'
-#' @param tvc_re
+#' @param df_re
 #'    Defines the number of knots used to model the baseline hazard function
 #'    for the recurrent event process.
 #'
@@ -102,75 +98,109 @@
 #' @export JointFPM
 
 JointFPM <- function(surv,
-                     re_terms,
-                     ce_terms,
+                     re_model,
+                     ce_model,
                      re_indicator,
                      ce_indicator,
-                     df_ce  = 3,
-                     tvc_re = 3,
+                     df_ce = 3,
+                     df_re = 3,
                      tvc_re_terms = NULL,
                      tvc_ce_terms = NULL,
                      cluster,
                      data){
 
   # Checks
-  if(!grepl("type.*=.*counting", surv)){
-
-    stop("The surv object needs to be of type counting.")
-
-  }
+  # if(!grepl("type.*=.*counting", surv)){
+  #
+  #   stop("The surv object needs to be of type counting.")
+  #
+  # }
 
   # Prepare data
-  data <-  data.table::copy(data.table::as.data.table(data))
+  time_var <- all.vars(surv)[[2]]
 
-  data[, paste0(re_terms, "_", re_indicator) := lapply(.SD, function(x)
-    x * data[[re_indicator]]), .SDcols = re_terms]
+  ce_model_string <- paste0(labels(terms(ce_model)), ":", ce_indicator,
+                            collapse = " + ")
 
-  data[, paste0(re_terms, "_", ce_indicator) := lapply(.SD, function(x)
-    x * data[[ce_indicator]]), .SDcols = ce_terms]
-
-  # Prepare model formula
-  model <- formula(paste(surv,
-                         "~",
-                         re_indicator,
-                         "+",
-                         paste0(re_terms, "_", re_indicator, collapse = "+"),
-                         "+",
-                         paste0(ce_terms, "_", ce_indicator, collapse = "+")))
+  re_model_string <- paste0(labels(terms(re_model)), ":", re_indicator,
+                            collapse = " + ")
 
   # Prepare tvc argument
   if(!is.null(tvc_re_terms)){
 
-    tvc_re_terms <- stats::setNames(tvc_re_terms,
-                                    paste0(names(tvc_re_terms), "_re"))
+    tvc_re_terms <- paste0(names(tvc_re_terms), ":",
+                           "nsx(log(", time_var, "),", tvc_re_terms, ")", ":",
+                           re_indicator,
+                           collapse = " + ")
+
 
   }
 
   if(!is.null(tvc_ce_terms)){
 
-    tvc_ce_terms <- stats::setNames(tvc_ce_terms,
-                                    paste0(names(tvc_ce_terms), "_ce"))
+    tvc_ce_terms <- paste0(names(tvc_ce_terms), ":",
+                           "nsx(log(", time_var, "),", tvc_ce_terms, ")", ":",
+                           ce_indicator,
+                           collapse = " + ")
 
   }
 
-  tvc <- c(list(re = tvc_re),
-           tvc_re_terms,
-           tvc_ce_terms)
+  comb_model_string <- paste("-1",
+                             ce_indicator,
+                             re_indicator,
+                             sep = " + ")
 
-  fpm <- rstpm2::stpm2(model,
-                       df      = df_ce,
-                       tvc     = tvc,
+  bh_formula_string <- paste0("nsx(log(", time_var, "),", df_ce, "):",
+                              ce_indicator,
+                              " + ",
+                              "nsx(log(", time_var, "),", df_re, "):",
+                              re_indicator)
+
+  smooth_formula_sting <- paste(ce_model_string,
+                                re_model_string,
+                                bh_formula_string,
+                                sep = " + ")
+
+  tvc_formula_string <-  ""
+
+  if(!is.null(tvc_ce_terms)) {
+
+    tvc_formula_string <- tvc_ce_terms
+
+  }
+
+  if(!is.null(tvc_re_terms)) {
+
+    tvc_formula_string <- paste0(tvc_formula_string,
+                                 " + ",
+                                 tvc_re_terms)
+
+  }
+
+  # Remove trailing plus
+  tvc_formula_string <- gsub("^ \\+ ", "", tvc_formula_string)
+
+  model_formula <- rlang::new_formula(rlang::f_lhs(surv),
+                                      rlang::parse_expr(comb_model_string))
+
+  tvc_formula <- rlang::new_formula(NULL, rlang::parse_expr(tvc_formula_string))
+  bh_formula  <- rlang::new_formula(NULL, rlang::parse_expr(smooth_formula_sting))
+
+  fpm <- rstpm2::stpm2(model_formula,
+                       df             = df_ce,
+                       smooth.formula = bh_formula,
+                       tvc.formula = tvc_formula,
                        cluster = data[[cluster]],
                        robust  = TRUE,
                        data    = data)
 
   out <- list(model        = fpm,
-              re_terms     = re_terms,
-              ce_terms     = ce_terms,
-              re_indicator = re_indicator)
+              re_indicator = re_indicator,
+              ce_indicator = ce_indicator)
 
   # Define class of output object
   class(out) <- "JointFPM"
 
   return(out)
+
 }
