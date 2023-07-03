@@ -100,6 +100,6 @@ mean_no <- function(formula,
   })
 
   # Output ---------------------------------------------------------------------
-  out <- data.table::rbindlist(tmp)
+  data.table::rbindlist(tmp)
 
 }
