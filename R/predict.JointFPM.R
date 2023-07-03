@@ -7,7 +7,7 @@
 #'
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param JointFPM
+#' @param object
 #'    A joint flexible parametric model of class `JointFPM`.
 #'
 #' @param type
@@ -41,6 +41,9 @@
 #'    of the integral (default = 50):
 #'    \deqn{E[N(t)] = \int_{0}^{t} S(t)\lambda(t)}
 #'
+#' @param ...
+#'    Added for compatibility with other predict functions.
+#'
 #' @details
 #'    The function required for the `exposed` argument must take the `newdata`
 #'    dataset as argument and transform it to a new dataset that defines the
@@ -68,13 +71,14 @@
 #'
 #' @export
 
-predict.JointFPM <- function(JointFPM,
+predict.JointFPM <- function(object,
                              type = "mean_no",
                              newdata,
                              t,
                              exposed,
                              ci_fit = TRUE,
-                             gauss_nodes = 100){
+                             gauss_nodes = 100,
+                             ...){
 
   if(type == "mean_no"){
 
@@ -82,18 +86,18 @@ predict.JointFPM <- function(JointFPM,
 
     tmp_newdata$st_dta <- cbind(newdata, 1, 0)
     colnames(tmp_newdata$st_dta) <- c(names(newdata),
-                                      JointFPM$ce_indicator,
-                                      JointFPM$re_indicator)
+                                      object$ce_indicator,
+                                      object$re_indicator)
 
     tmp_newdata$lambda_dta <- cbind(newdata, 0, 1)
     colnames(tmp_newdata$lambda_dta) <- c(names(newdata),
-                                          JointFPM$ce_indicator,
-                                          JointFPM$re_indicator)
+                                          object$ce_indicator,
+                                          object$re_indicator)
 
     # Use Delta Method to obtain confidence intervals for E[N]
     if(ci_fit){
 
-      est <- rstpm2::predictnl(JointFPM$model,
+      est <- rstpm2::predictnl(object$model,
                                fun = function(obj, ...){
 
                                  calc_N(obj, t,
@@ -105,7 +109,7 @@ predict.JointFPM <- function(JointFPM,
 
     } else {
 
-      est <- calc_N(JointFPM$model, t,
+      est <- calc_N(object$model, t,
                     lambda_dta = tmp_newdata$lambda_dta,
                     st_dta     = tmp_newdata$st_dta,
                     nodes      = gauss_nodes)
@@ -121,13 +125,13 @@ predict.JointFPM <- function(JointFPM,
 
     tmp_newdata_e0$st_dta <- cbind(newdata, 1, 0)
     colnames(tmp_newdata_e0$st_dta) <- c(names(newdata),
-                                         JointFPM$ce_indicator,
-                                         JointFPM$re_indicator)
+                                         object$ce_indicator,
+                                         object$re_indicator)
 
     tmp_newdata_e0$lambda_dta <- cbind(newdata, 0, 1)
     colnames(tmp_newdata_e0$lambda_dta) <- c(names(newdata),
-                                             JointFPM$ce_indicator,
-                                             JointFPM$re_indicator)
+                                             object$ce_indicator,
+                                             object$re_indicator)
 
     tmp_newdata_e1 <- tmp_newdata_e0
     tmp_newdata_e1$st_dta     <- do.call(exposed, list(tmp_newdata_e1$st_dta))
@@ -136,7 +140,7 @@ predict.JointFPM <- function(JointFPM,
     # Use Delta Method to obtain confidence intervals for E[N]
     if(ci_fit){
 
-      est <- rstpm2::predictnl(JointFPM$model,
+      est <- rstpm2::predictnl(object$model,
                                fun = function(obj, ...){
 
                                  e0 <- calc_N(obj, t,
@@ -157,12 +161,12 @@ predict.JointFPM <- function(JointFPM,
 
     } else {
 
-      e0 <- calc_N(JointFPM$model, t,
+      e0 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e0$lambda_dta,
                    st_dta     = tmp_newdata_e0$st_dta,
                    nodes      = gauss_nodes)
 
-      e1 <- calc_N(JointFPM$model, t,
+      e1 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e1$lambda_dta,
                    st_dta     = tmp_newdata_e1$st_dta,
                    nodes      = gauss_nodes)
@@ -189,7 +193,7 @@ predict.JointFPM <- function(JointFPM,
   }
 
 
-  colnames(out)[1] <- JointFPM$model@timeVar
+  colnames(out)[1] <- object$model@timeVar
 
   return(out)
 
