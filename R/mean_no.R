@@ -42,6 +42,9 @@ mean_no <- function(formula,
                     re_control = list(),
                     ce_control = list()){
 
+  # Define variable shells for data.table --------------------------------------
+  time <- n.event <- n.risk <- surv <- na <- expn <- NULL
+
   # Define risktable for recurrent event ---------------------------------------
   re_control$formula <- formula
   re_control$data    <- data[data[[re_indicator]] == 1, ]
@@ -71,8 +74,8 @@ mean_no <- function(formula,
 
   tmp <- lapply(stratas, function(x){
 
-    re_df <- risktab_re[strata == x, .(time, na = n.event / n.risk)]
-    ce_df <- risktab_ce[strata == x, .(time, surv)]
+    re_df <- risktab_re[strata == x, list(time, na = n.event / n.risk)]
+    ce_df <- risktab_ce[strata == x, list(time, surv)]
 
     comb_df <- merge(re_df,
                      ce_df,
