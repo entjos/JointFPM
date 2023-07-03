@@ -1,5 +1,5 @@
 Package: JointFPM
-Title: A package for estimating the mean number of events across time.
+Title: A package for estimating the mean number of events across time
 Version: 0.0.1
 Authors@R: 
     person(given = "Joshua P.",
@@ -23,7 +23,8 @@ Imports:
     rstpm2 (>= 1.5.2),
     survival (>= 3.2-13),
     data.table (>= 1.14.2),
-    rlang (>= 1.1.0)
+    rlang (>= 1.1.0),
+    statmod (>= 1.5.0),
     lifecycle
 Depends:
   R (>= 4.0)
