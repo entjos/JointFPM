@@ -1,3 +1,4 @@
+
 # Description
 
 This package includes functions for parametrically estimating the mean
@@ -83,20 +84,20 @@ head(bldr_stacked)
     5:  5   placebo     0   10      3  1  0     1          0        0
     6:  6   placebo     0   10      3  1  0     1          0        0
 
-The next step is to fir a joint flexible parametric model using the
+The next step is to fit a joint flexible parametric model using the
 stacked dataset.
 
 ``` r
-bldr_model <- JointFPM("Surv(time  = start,
-                            time2  = stop, 
-                            event  = event,
-                            type   = 'counting')",
-                       re_terms = c("pyridoxine", "thiotepa"),
-                       ce_terms = c("pyridoxine", "thiotepa"),
+bldr_model <- JointFPM(Surv(time  = start,
+                            time2 = stop, 
+                            event = event,
+                            type  = 'counting') ~ 1,
+                       re_model = ~ pyridoxine + thiotepa,
+                       ce_model = ~ pyridoxine + thiotepa,
                        re_indicator = "re",
                        ce_indicator = "ce",
-                       df_ce  = 3,
-                       tvc_re = 3,
+                       df_ce = 3,
+                       df_re = 3,
                        tvc_ce_terms = list(pyridoxine = 2,
                                            thiotepa   = 2),
                        tvc_re_terms = list(pyridoxine = 2,
@@ -106,7 +107,9 @@ bldr_model <- JointFPM("Surv(time  = start,
 ```
 
 Based on the model we can predict the mean number of events at different
-time points and covariate patterns.
+time points and covariate patterns. Please note the estimation of confidence 
+intervals for the mean number of events is computer intensive. The following 
+code might take some minutes to run on your machine.
 
 ``` r
 predict(bldr_model,
@@ -115,12 +118,10 @@ predict(bldr_model,
         t =  c(10, 20, 50))
 ```
 
-    Convergence criteria reached.
-
       stop       fit       lci       uci
-    1   10 0.6068163 0.3467422 0.8668905
-    2   20 1.1156351 0.7300915 1.5011786
-    3   50 2.3789298 1.6762631 3.0815965
+    1   10 0.6068153 0.2866777 0.9269528
+    2   20 1.1156503 0.5334427 1.6978580
+    3   50 2.3789320 1.0343114 3.7235525
 
 # Bugs
 

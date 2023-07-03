@@ -64,19 +64,19 @@ head(bldr_stacked)
 
 ```
 
-The next step is to fir a joint flexible parametric model using the stacked dataset.
+The next step is to fit a joint flexible parametric model using the stacked dataset.
 
 ```{R}
-bldr_model <- JointFPM("Surv(time  = start,
-                            time2  = stop, 
-                            event  = event,
-                            type   = 'counting')",
-                       re_terms = c("pyridoxine", "thiotepa"),
-                       ce_terms = c("pyridoxine", "thiotepa"),
+bldr_model <- JointFPM(Surv(time  = start,
+                            time2 = stop, 
+                            event = event,
+                            type  = 'counting') ~ 1,
+                       re_model = ~ pyridoxine + thiotepa,
+                       ce_model = ~ pyridoxine + thiotepa,
                        re_indicator = "re",
                        ce_indicator = "ce",
-                       df_ce  = 3,
-                       tvc_re = 3,
+                       df_ce = 3,
+                       df_re = 3,
                        tvc_ce_terms = list(pyridoxine = 2,
                                            thiotepa   = 2),
                        tvc_re_terms = list(pyridoxine = 2,
@@ -85,7 +85,7 @@ bldr_model <- JointFPM("Surv(time  = start,
                        data     = bldr_stacked)
 ```
 
-Based on the model we can predict the mean number of events at different time points and covariate patterns.
+Based on the model we can predict the mean number of events at different time points and covariate patterns. Please note the estimation of confidence intervals for the mean number of events is computer intensive. The following code might take some minutes to run on your machine.
 
 ```{R}
 predict(bldr_model,
