@@ -4,7 +4,7 @@
 \name{JointFPM-package}
 \alias{JointFPM}
 \alias{JointFPM-package}
-\title{JointFPM: A package for estimating the mean number of events across time.}
+\title{JointFPM: A package for estimating the mean number of events across time}
 \description{
 This package introduces a parametric estimator of the mean number of events in the presence of ceompeting events. The estimator is based on a joint flexible parametric model (FPM) for the recurrent and competing event process and includes a wrapper for `rstpm2::stpm2()` which implements an easy specification of such models.
 }
