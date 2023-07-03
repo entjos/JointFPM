@@ -111,21 +111,13 @@ JointFPM <- function(surv,
                      tvc_ce_terms = NULL,
                      cluster,
                      data){
-
-  # Checks
-  # if(!grepl("type.*=.*counting", surv)){
-  #
-  #   stop("The surv object needs to be of type counting.")
-  #
-  # }
-
   # Prepare data
   time_var <- all.vars(surv)[[2]]
 
-  ce_model_string <- paste0(labels(terms(ce_model)), ":", ce_indicator,
+  ce_model_string <- paste0(labels(stats::terms(ce_model)), ":", ce_indicator,
                             collapse = " + ")
 
-  re_model_string <- paste0(labels(terms(re_model)), ":", re_indicator,
+  re_model_string <- paste0(labels(stats::terms(re_model)), ":", re_indicator,
                             collapse = " + ")
 
   # Prepare tvc argument
