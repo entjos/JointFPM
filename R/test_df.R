@@ -4,28 +4,46 @@
 #'
 #' @noRd
 #'
-#' @param formula
-#'    A `formula` passed to `rstpm2::stpm2()`.
+#' @param surv
+#'    See `JointFPM()` function documentation for detailed information.
 #'
-#' @param df_bh
-#'    The number of knots for the baseline hazard function.
+#' @param re_model
+#'    See `JointFPM()` function documentation for detailed information.
 #'
-#' @param df_tvc
-#'    A list with the number of knots for the different time-varying effects.
+#' @param ce_model
+#'    See `JointFPM()` function documentation for detailed information.
+#'
+#' @param re_indicator
+#'    See `JointFPM()` function documentation for detailed information.
+#'
+#' @param ce_indicator
+#'    See `JointFPM()` function documentation for detailed information.
+#'
+#' @param df_ce
+#'    See `JointFPM()` function documentation for detailed information.
+#'
+#' @param df_re
+#'    See `JointFPM()` function documentation for detailed information.
+#'
+#'@param tvc_re_terms
+#'    See `JointFPM()` function documentation for detailed information.
+#'
+#' @param tvc_ce_terms
+#'    See `JointFPM()` function documentation for detailed information.
 #'
 #' @param cluster
-#'    A chacter vector specifying the name of the variable that defines unique
-#'    observation in the dataset passed to the function.
+#'   See `JointFPM()` function documentation for detailed information.
 #'
 #' @param data
-#'    A `data.frame` passed to `rstpm2::stpm2()`.
+#'    See `JointFPM()` function documentation for detailed information.
 #'
 #' @return
 #'    A `data.frame` with the following columns:
 #'    \itemize{
-#'      \item{`df_bh`: }{The number of knots for the baseline hazard function,}
-#'      \item{`df_tvs`: }{The number of knots for the different time-varying
-#'      effects,}
+#'      \item{`df_ce`: }{The number of knots for the baseline hazard function
+#'      of the competing event,}
+#'      \item{`df_re`: }{The number of knots for the baseline intensity function
+#'      of the recurrent event,}
 #'      \item{`aic`: }{The AIC value of the model fit,}
 #'      \item{`bic`: }{The BIC value of the model fit,}
 #'    }
