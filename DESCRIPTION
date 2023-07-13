@@ -25,6 +25,7 @@ Imports:
     data.table (>= 1.14.2),
     rlang (>= 1.1.0),
     statmod (>= 1.5.0),
-    lifecycle
+    lifecycle,
+    rmutil
 Depends:
   R (>= 4.0)
