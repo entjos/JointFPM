@@ -77,8 +77,6 @@ predict.JointFPM <- function(object,
                              t,
                              exposed,
                              ci_fit = TRUE,
-                             gauss_nodes = 100,
-                             use_rmutil = FALSE,
                              ...){
 
   if(type == "mean_no"){
