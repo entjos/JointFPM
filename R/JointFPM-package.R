@@ -1,3 +1,4 @@
+#' @aliases JointFPM-package
 #' @keywords internal
 "_PACKAGE"
 
