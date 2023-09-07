@@ -27,16 +27,15 @@
 #' @return
 #'    A numeric vector of integral with the same length as t.
 
-calc_N <- function(obj, t, lambda_dta, st_dta, nodes){
+calc_N <- function(obj, t, lambda_dta, st_dta, nodes, rmutil = FALSE) {
 
-  N <- gaussian_quad(.f = function(x) predict_n(obj,
-                                                t = x,
-                                                lambda_dta,
-                                                st_dta),
-                     lower = 0,
-                     upper = t,
-                     nodes = nodes)
+    if(0 %in% t) t[which(t == 0)] <- t[which(t == 0)] + .Machine$double.xmin
+
+    N <- rmutil::int(
+      f = function(x) predict_n(obj, t = x, lambda_dta, st_dta),
+      a = 0,
+      b = t
+    )
 
   return(N)
-
 }

@@ -77,7 +77,6 @@ predict.JointFPM <- function(object,
                              t,
                              exposed,
                              ci_fit = TRUE,
-                             gauss_nodes = 100,
                              ...){
 
   if(type == "mean_no"){
@@ -103,7 +102,8 @@ predict.JointFPM <- function(object,
                                  calc_N(obj, t,
                                         lambda_dta = tmp_newdata$lambda_dta,
                                         st_dta     = tmp_newdata$st_dta,
-                                        nodes      = gauss_nodes)
+                                        nodes      = gauss_nodes,
+                                        rmutil     = use_rmutil)
 
                                })
 
@@ -112,7 +112,8 @@ predict.JointFPM <- function(object,
       est <- calc_N(object$model, t,
                     lambda_dta = tmp_newdata$lambda_dta,
                     st_dta     = tmp_newdata$st_dta,
-                    nodes      = gauss_nodes)
+                    nodes      = gauss_nodes,
+                    rmutil     = use_rmutil)
 
     }
 
@@ -146,12 +147,14 @@ predict.JointFPM <- function(object,
                                  e0 <- calc_N(obj, t,
                                               lambda_dta = tmp_newdata_e0$lambda_dta,
                                               st_dta     = tmp_newdata_e0$st_dta,
-                                              nodes      = gauss_nodes)
+                                              nodes      = gauss_nodes,
+                                              rmutil     = use_rmutil)
 
                                  e1 <- calc_N(obj, t,
                                               lambda_dta = tmp_newdata_e1$lambda_dta,
                                               st_dta     = tmp_newdata_e1$st_dta,
-                                              nodes      = gauss_nodes)
+                                              nodes      = gauss_nodes,
+                                              rmutil     = use_rmutil)
 
                                  out <- e0-e1
 
@@ -164,12 +167,14 @@ predict.JointFPM <- function(object,
       e0 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e0$lambda_dta,
                    st_dta     = tmp_newdata_e0$st_dta,
-                   nodes      = gauss_nodes)
+                   nodes      = gauss_nodes,
+                   rmutil     = use_rmutil)
 
       e1 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e1$lambda_dta,
                    st_dta     = tmp_newdata_e1$st_dta,
-                   nodes      = gauss_nodes)
+                   nodes      = gauss_nodes,
+                   rmutil     = use_rmutil)
 
       est <- e0-e1
     }
