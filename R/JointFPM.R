@@ -86,7 +86,7 @@
 #'    ```
 #'
 #' @return
-#'    An object of class `JointFPM` with the follwing elements:
+#'    An object of class `JointFPM` with the following elements:
 #'    \itemize{
 #'      \item{`model`: }{The fitted FPM object,}
 #'      \item{`re_terms`: }{The terms used to model the recurrent event model,}
@@ -98,6 +98,64 @@
 #' @importFrom data.table `:=`
 #' @import rstpm2
 #'
+#' @examples
+#' \dontrun{
+#' library(data.table) # For data preparations
+#' 
+#' # Load bladder cancer dataset from survival package
+#' bldr_df <- as.data.table(survival::bladder1)
+#' bldr_df <- bldr_df[, .(id, treatment, start, stop, status)]
+#' 
+#' # Define dataset for competing event times
+#' bldr_ce <- bldr_df[, .SD[stop == max(stop)],
+#'                    by = id]
+#' 
+#' bldr_ce[, `:=`(ce = 1,
+#'                re = 0,
+#'                event = as.numeric(status %in% 2:3),
+#'                start = 0)]
+#' 
+#' # Define dataset for bladder cancer recurrences
+#' bldr_re <- bldr_df[,
+#'                    `:=`(ce = 0,
+#'                         re = 1,
+#'                         event = as.numeric(status == 1))]
+#' 
+#' # Combine datasets into one stacked dataset
+#' 
+#' bldr_stacked <- rbindlist(list(bldr_ce, bldr_re))
+#' 
+#' bldr_stacked[, `:=`(pyridoxine = as.numeric(treatment == "pyridoxine"),
+#'                     thiotepa   = as.numeric(treatment == "thiotepa"))]
+#' 
+#' bldr_stacked$stop[bldr_stacked$stop == 0] <- 1 # Add one day survival 
+#' 
+#' # Print stacked dataset
+#' head(bldr_stacked)
+#' 
+#' bldr_model <- JointFPM(Surv(time  = start,
+#'                             time2 = stop, 
+#'                             event = event,
+#'                             type  = 'counting') ~ 1,
+#'                        re_model = ~ pyridoxine + thiotepa,
+#'                        ce_model = ~ pyridoxine + thiotepa,
+#'                        re_indicator = "re",
+#'                        ce_indicator = "ce",
+#'                        df_ce = 3,
+#'                        df_re = 3,
+#'                        tvc_ce_terms = list(pyridoxine = 2,
+#'                                            thiotepa   = 2),
+#'                        tvc_re_terms = list(pyridoxine = 2,
+#'                                            thiotepa   = 2),
+#'                        cluster  = "id",
+#'                        data     = bldr_stacked)
+#' 
+#' predict(bldr_model,
+#'         newdata = data.frame(pyridoxine = 1, 
+#'                              thiotepa   = 0),
+#'         t =  c(10, 20, 50))
+#' }
+#' 
 #' @export JointFPM
 
 JointFPM <- function(surv,
