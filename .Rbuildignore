@@ -3,3 +3,4 @@
 ^JointFPM.*\.tar\.gz$
 README.qmd
 ^LICENSE\.md$
+^cran-comments\.md$
