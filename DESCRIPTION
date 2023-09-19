@@ -3,9 +3,15 @@ Type: Package
 Title: Estimation of the Mean Number of Events Across Time
 Authors@R: c(person(given = "Joshua P.",
                     family = "Entrop",
-           	    role = c("aut", "cre"),
-           	    email = "joshuaentrop@posteo.de",
-           	    comment = c(ORCID = "0000-0003-1614-8096")))
+           	        role = c("aut", "cre"),
+           	        email = "joshuaentrop@posteo.de",
+           	        comment = c(ORCID = "0000-0003-1614-8096")),
+           	 person(given  = "Alessandro",
+                    family = "Gasparini",
+                    role = "ctb"),
+             person(given  = "Mark",
+                    family = "Clements",
+                    role   = "ctb"))
 Version: 0.0.2
 Date: 2023-09-06
 Maintainer: Joshua P. Entrop <joshuaentrop@posteo.de>
