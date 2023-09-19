@@ -16,7 +16,7 @@ Version: 1.0.0
 Date: 2023-09-19
 Description: A parametric model for estimating the mean number
   of events in the presence of competing events. The estimator is based on a 
-  joint flexible parametric model (FPM) for the recurrent and competing event 
+  joint flexible parametric model for the recurrent and competing event 
   process and includes a wrapper for 'rstpm2::stpm2()' which implements an 
   easy specification of such models.
 URL: https://github.com/entjos/JointFPM
