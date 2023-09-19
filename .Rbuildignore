@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^JointFPM.*\.tar\.gz$
 README.qmd
+^LICENSE\.md$
