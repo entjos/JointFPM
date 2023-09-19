@@ -12,7 +12,7 @@ Authors@R: c(person(given = "Joshua P.",
              person(given  = "Mark",
                     family = "Clements",
                     role   = "ctb"))
-Version: 0.0.2
+Version: 1.0.0
 Date: 2023-09-06
 Maintainer: Joshua P. Entrop <joshuaentrop@posteo.de>
 Author: Joshua P. Entrop [aut, cre]  (<https://orcid.org/0000-0003-1614-8096>)
