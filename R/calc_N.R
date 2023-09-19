@@ -21,13 +21,10 @@
 #'    A `data.frame` used to predict the survival function for the competing
 #'    event process.
 #'
-#' @param nodes
-#'    The number of nodes used for the Gaussian quadrature.
-#'
 #' @return
 #'    A numeric vector of integral with the same length as t.
 
-calc_N <- function(obj, t, lambda_dta, st_dta, nodes) {
+calc_N <- function(obj, t, lambda_dta, st_dta) {
 
     if(0 %in% t) t[which(t == 0)] <- t[which(t == 0)] + .Machine$double.xmin
 

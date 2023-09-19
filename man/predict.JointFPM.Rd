@@ -31,10 +31,6 @@ Please see details for more information.}
 for the fitted estimated using the delta method.}
 
 \item{...}{Added for compatibility with other predict functions.}
-
-\item{gauss_nodes}{Number of nodes used for the Gaussian quadrature approximation
-of the integral (default = 50):
-\deqn{E[N(t)] = \int_{0}^{t} S(t)\lambda(t)}}
 }
 \value{
 A \code{data.frame} with the following columns:

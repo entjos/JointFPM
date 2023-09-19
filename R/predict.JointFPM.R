@@ -96,8 +96,7 @@ predict.JointFPM <- function(object,
 
                                  calc_N(obj, t,
                                         lambda_dta = tmp_newdata$lambda_dta,
-                                        st_dta     = tmp_newdata$st_dta,
-                                        nodes      = gauss_nodes)
+                                        st_dta     = tmp_newdata$st_dta)
 
                                })
 
@@ -105,9 +104,7 @@ predict.JointFPM <- function(object,
 
       est <- calc_N(object$model, t,
                     lambda_dta = tmp_newdata$lambda_dta,
-                    st_dta     = tmp_newdata$st_dta,
-                    nodes      = gauss_nodes,
-                    rmutil     = use_rmutil)
+                    st_dta     = tmp_newdata$st_dta)
 
     }
 
@@ -140,15 +137,11 @@ predict.JointFPM <- function(object,
 
                                  e0 <- calc_N(obj, t,
                                               lambda_dta = tmp_newdata_e0$lambda_dta,
-                                              st_dta     = tmp_newdata_e0$st_dta,
-                                              nodes      = gauss_nodes,
-                                              rmutil     = use_rmutil)
+                                              st_dta     = tmp_newdata_e0$st_dta)
 
                                  e1 <- calc_N(obj, t,
                                               lambda_dta = tmp_newdata_e1$lambda_dta,
-                                              st_dta     = tmp_newdata_e1$st_dta,
-                                              nodes      = gauss_nodes,
-                                              rmutil     = use_rmutil)
+                                              st_dta     = tmp_newdata_e1$st_dta)
 
                                  out <- e0-e1
 
@@ -160,15 +153,11 @@ predict.JointFPM <- function(object,
 
       e0 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e0$lambda_dta,
-                   st_dta     = tmp_newdata_e0$st_dta,
-                   nodes      = gauss_nodes,
-                   rmutil     = use_rmutil)
+                   st_dta     = tmp_newdata_e0$st_dta)
 
       e1 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e1$lambda_dta,
-                   st_dta     = tmp_newdata_e1$st_dta,
-                   nodes      = gauss_nodes,
-                   rmutil     = use_rmutil)
+                   st_dta     = tmp_newdata_e1$st_dta)
 
       est <- e0-e1
     }
