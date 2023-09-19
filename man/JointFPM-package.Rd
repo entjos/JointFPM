@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Joshua P. Entrop \email{joshuaentrop@posteo.de} (\href{https://orcid.org/0000-0003-1614-8096}{ORCID})
+\strong{Maintainer}: Joshua P. Entrop \email{joshuaentrop@posteo.de} (\href{https://orcid.org/0000-0003-1614-8096}{ORCID}) [copyright holder]
 
 Other contributors:
 \itemize{
