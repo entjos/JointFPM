@@ -5,8 +5,6 @@
 #' Currently only the estimation of the mean number of events at different
 #' time points is supported.
 #'
-#' `r lifecycle::badge("experimental")`
-#'
 #' @param object
 #'    A joint flexible parametric model of class `JointFPM`.
 #'
