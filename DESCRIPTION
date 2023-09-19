@@ -32,7 +32,6 @@ Imports:
     survival (>= 3.2-13),
     data.table (>= 1.14.2),
     rlang (>= 1.1.0),
-    statmod (>= 1.5.0),
     lifecycle,
     rmutil
 Depends:
