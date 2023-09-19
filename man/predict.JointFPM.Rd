@@ -4,16 +4,7 @@
 \alias{predict.JointFPM}
 \title{Post-estimation function for JointFPMs}
 \usage{
-\method{predict}{JointFPM}(
-  object,
-  type = "mean_no",
-  newdata,
-  t,
-  exposed,
-  ci_fit = TRUE,
-  gauss_nodes = 100,
-  ...
-)
+\method{predict}{JointFPM}(object, type = "mean_no", newdata, t, exposed, ci_fit = TRUE, ...)
 }
 \arguments{
 \item{object}{A joint flexible parametric model of class \code{JointFPM}.}
@@ -39,11 +30,11 @@ Please see details for more information.}
 \item{ci_fit}{Logical indicator for whether confidence intervalls should be obtained
 for the fitted estimated using the delta method.}
 
+\item{...}{Added for compatibility with other predict functions.}
+
 \item{gauss_nodes}{Number of nodes used for the Gaussian quadrature approximation
 of the integral (default = 50):
 \deqn{E[N(t)] = \int_{0}^{t} S(t)\lambda(t)}}
-
-\item{...}{Added for compatibility with other predict functions.}
 }
 \value{
 A \code{data.frame} with the following columns:
