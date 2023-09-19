@@ -99,8 +99,6 @@ Fits a joint flexible parametric survival model (FPM) for a recurrent and
 terminal event. The joint model can be used to predict the mean number of
 events at different time points. This function is a wrapper around
 \code{rstpm2::stpm2()}.
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
@@ -132,13 +130,13 @@ bldr_stacked <- rbindlist(list(bldr_ce, bldr_re))
 bldr_stacked[, `:=`(pyridoxine = as.numeric(treatment == "pyridoxine"),
                     thiotepa   = as.numeric(treatment == "thiotepa"))]
 
-bldr_stacked$stop[bldr_stacked$stop == 0] <- 1 # Add one day survival 
+bldr_stacked$stop[bldr_stacked$stop == 0] <- 1 # Add one day survival
 
 # Print stacked dataset
 head(bldr_stacked)
 
 bldr_model <- JointFPM(Surv(time  = start,
-                            time2 = stop, 
+                            time2 = stop,
                             event = event,
                             type  = 'counting') ~ 1,
                        re_model = ~ pyridoxine + thiotepa,
@@ -155,7 +153,7 @@ bldr_model <- JointFPM(Surv(time  = start,
                        data     = bldr_stacked)
 
 predict(bldr_model,
-        newdata = data.frame(pyridoxine = 1, 
+        newdata = data.frame(pyridoxine = 1,
                              thiotepa   = 0),
         t =  c(10, 20, 50))
 }
