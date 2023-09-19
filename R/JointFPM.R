@@ -97,7 +97,6 @@
 #' @import rstpm2
 #'
 #' @examples
-#' \dontrun{
 #' library(data.table) # For data preparations
 #'
 #' # Load bladder cancer dataset from survival package
@@ -131,28 +130,22 @@
 #' # Print stacked dataset
 #' head(bldr_stacked)
 #'
-#' bldr_model <- JointFPM(Surv(time  = start,
-#'                             time2 = stop,
-#'                             event = event,
-#'                             type  = 'counting') ~ 1,
-#'                        re_model = ~ pyridoxine + thiotepa,
-#'                        ce_model = ~ pyridoxine + thiotepa,
-#'                        re_indicator = "re",
-#'                        ce_indicator = "ce",
-#'                        df_ce = 3,
-#'                        df_re = 3,
-#'                        tvc_ce_terms = list(pyridoxine = 2,
-#'                                            thiotepa   = 2),
-#'                        tvc_re_terms = list(pyridoxine = 2,
-#'                                            thiotepa   = 2),
-#'                        cluster  = "id",
-#'                        data     = bldr_stacked)
-#'
-#' predict(bldr_model,
-#'         newdata = data.frame(pyridoxine = 1,
-#'                              thiotepa   = 0),
-#'         t =  c(10, 20, 50))
-#' }
+#' JointFPM(Surv(time  = start,
+#'               time2 = stop,
+#'               event = event,
+#'               type  = 'counting') ~ 1,
+#'          re_model = ~ pyridoxine + thiotepa,
+#'          ce_model = ~ pyridoxine + thiotepa,
+#'          re_indicator = "re",
+#'          ce_indicator = "ce",
+#'          df_ce = 3,
+#'          df_re = 3,
+#'          tvc_ce_terms = list(pyridoxine = 2,
+#'                              thiotepa   = 2),
+#'          tvc_re_terms = list(pyridoxine = 2,
+#'                              thiotepa   = 2),
+#'          cluster  = "id",
+#'          data     = bldr_stacked)
 #'
 #' @export JointFPM
 
