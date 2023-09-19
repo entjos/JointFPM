@@ -16,7 +16,13 @@ Please note that this package is currently under development and might change th
 
 # Installation
 
-For installing the package from GitHub please use
+For installing the package from CRAN please use
+
+```{R}
+install.packages("JointFPM")
+```
+
+If you would like to use the latest development version from GitHub please use
 
 ```{R}
 remotes::install_github("entjos/JointFPM")

@@ -21,7 +21,13 @@ change throughout the process.
 
 # Installation
 
-For installing the package from GitHub please use
+For installing the package from CRAN please use
+
+``` r
+install.packages("JointFPM")
+```
+
+If you would like to use the latest development version from GitHub please use
 
 ``` r
 remotes::install_github("entjos/JointFPM")
