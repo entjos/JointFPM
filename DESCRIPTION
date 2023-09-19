@@ -1,6 +1,6 @@
 Package: JointFPM
 Type: Package
-Title: Estimation of the Mean Number of Events Across Time
+Title: A Parametric Model for Estimating the Mean Number of Events
 Authors@R: c(person(given = "Joshua P.",
                     family = "Entrop",
            	        role = c("aut", "cre"),
@@ -13,13 +13,11 @@ Authors@R: c(person(given = "Joshua P.",
                     family = "Clements",
                     role   = "ctb"))
 Version: 1.0.0
-Date: 2023-09-06
-Maintainer: Joshua P. Entrop <joshuaentrop@posteo.de>
-Author: Joshua P. Entrop [aut, cre]  (<https://orcid.org/0000-0003-1614-8096>)
-Description: Introduces a parametric estimator of the mean number
-  of events in the presence of ceompeting events. The estimator is based on a 
+Date: 2023-09-19
+Description: A parametric model for estimating the mean number
+  of events in the presence of competing events. The estimator is based on a 
   joint flexible parametric model (FPM) for the recurrent and competing event 
-  process and includes a wrapper for `rstpm2::stpm2()` which implements an 
+  process and includes a wrapper for 'rstpm2::stpm2()' which implements an 
   easy specification of such models.
 URL: https://github.com/entjos/JointFPM
 BugReports: https://github.com/entjos/JointFPM/issues
