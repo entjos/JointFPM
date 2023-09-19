@@ -27,7 +27,7 @@
 #' @return
 #'    A numeric vector of integral with the same length as t.
 
-calc_N <- function(obj, t, lambda_dta, st_dta, nodes, rmutil = FALSE) {
+calc_N <- function(obj, t, lambda_dta, st_dta, nodes) {
 
     if(0 %in% t) t[which(t == 0)] <- t[which(t == 0)] + .Machine$double.xmin
 

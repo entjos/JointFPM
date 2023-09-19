@@ -36,11 +36,6 @@
 #'    Logical indicator for whether confidence intervalls should be obtained
 #'    for the fitted estimated using the delta method.
 #'
-#' @param gauss_nodes
-#'    Number of nodes used for the Gaussian quadrature approximation
-#'    of the integral (default = 50):
-#'    \deqn{E[N(t)] = \int_{0}^{t} S(t)\lambda(t)}
-#'
 #' @param ...
 #'    Added for compatibility with other predict functions.
 #'
@@ -102,8 +97,7 @@ predict.JointFPM <- function(object,
                                  calc_N(obj, t,
                                         lambda_dta = tmp_newdata$lambda_dta,
                                         st_dta     = tmp_newdata$st_dta,
-                                        nodes      = gauss_nodes,
-                                        rmutil     = use_rmutil)
+                                        nodes      = gauss_nodes)
 
                                })
 
