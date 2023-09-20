@@ -102,16 +102,13 @@ bldr_model <- JointFPM(Surv(time  = start,
                        ce_indicator = "ce",
                        df_ce = 3,
                        df_re = 3,
-                       tvc_ce_terms = list(pyridoxine = 2,
-                                           thiotepa   = 2),
-                       tvc_re_terms = list(pyridoxine = 2,
-                                           thiotepa   = 2),
                        cluster  = "id",
                        data     = bldr_stacked)
 
 predict(bldr_model,
         newdata = data.frame(pyridoxine = 1,
                              thiotepa   = 0),
-        t =  c(10, 20, 50))
+        t       =  c(10, 20),
+        ci_fit  = FALSE)
 
 }
