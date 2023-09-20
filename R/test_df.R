@@ -77,24 +77,28 @@ test_df <- function(surv,
   model <- model_call()
 
 
+  # Prepare output dataframe
+  out <- data.frame(df_ce = df_ce,
+                    df_re = df_re)
+
+  if(!is.null(tvc_ce_terms)){
+    out <- cbind(out, tvc_ce_terms)
+  }
+
+  if(!is.null(tvc_re_terms)){
+    out <- cbind(out, tvc_re_terms)
+  }
+
   # Obtain AIC and BIC criteria
   if(is.null(model)){
 
-    out <- data.table::data.table(df_ce = df_ce,
-                                  df_re = df_re,
-                                  df_ce = tvc_ce_terms,
-                                  df_re = tvc_re_terms,
-                                  aic   = Inf,
-                                  bic   = Inf)
+    out <- cbind(out, list(aic = Inf,
+                           bic = Inf))
 
   } else {
 
-    out <- data.table::data.table(df_ce = df_ce,
-                                  df_re = df_re,
-                                  df_ce = tvc_ce_terms,
-                                  df_re = tvc_re_terms,
-                                  stats::AIC(model$model),
-                                  stats::BIC(model$model))
+    out <- cbind(out, list(stats::AIC(model$model),
+                           stats::BIC(model$model)))
   }
 
   # Improve naming
