@@ -80,27 +80,32 @@ test_df <- function(surv,
   # Obtain AIC and BIC criteria
   if(is.null(model)){
 
-    out <- data.frame(df_ce = df_ce,
-                      df_re = df_re,
-                      df_ce = tvc_ce_terms,
-                      df_re = tvc_re_terms,
-                      aic   = Inf,
-                      bic   = Inf)
+    out <- data.table::data.table(df_ce = df_ce,
+                                  df_re = df_re,
+                                  df_ce = tvc_ce_terms,
+                                  df_re = tvc_re_terms,
+                                  aic   = Inf,
+                                  bic   = Inf)
 
   } else {
 
-    out <- data.frame(df_ce = df_ce,
-                      df_re = df_re,
-                      df_ce = tvc_ce_terms,
-                      df_re = tvc_re_terms,
-                      stats::AIC(model$model),
-                      stats::BIC(model$model))
+    out <- data.table::data.table(df_ce = df_ce,
+                                  df_re = df_re,
+                                  df_ce = tvc_ce_terms,
+                                  df_re = tvc_re_terms,
+                                  stats::AIC(model$model),
+                                  stats::BIC(model$model))
   }
 
   # Improve naming
-  colnames(out) <- c("df_ce", "df_re", paste0("df_ce_", names(tvc_ce_terms)),
-                     paste0("df_re_", names(tvc_re_terms)),
-                     "AIC", "BIC")
+  colnames(out) <- c(
+    "df_ce",
+    "df_re",
+    if(!is.null(tvc_ce_terms)) paste0("df_ce_", names(tvc_ce_terms)),
+    if(!is.null(tvc_re_terms)) paste0("df_re_", names(tvc_re_terms)),
+    "AIC",
+    "BIC"
+  )
 
   return(out)
 

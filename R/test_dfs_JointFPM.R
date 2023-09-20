@@ -111,7 +111,6 @@
 #'                         event = as.numeric(status == 1))]
 #'
 #' # Combine datasets into one stacked dataset
-#'
 #' bldr_stacked <- rbindlist(list(bldr_ce, bldr_re))
 #'
 #' bldr_stacked[, `:=`(pyridoxine = as.numeric(treatment == "pyridoxine"),
@@ -119,9 +118,7 @@
 #'
 #' bldr_stacked$stop[bldr_stacked$stop == 0] <- 1 # Add one day survival
 #'
-#' # Print stacked dataset
-#' head(bldr_stacked)
-#'
+#' # Test different dfs
 #' test_dfs_JointFPM(Surv(time  = start,
 #'                        time2 = stop,
 #'                        event = event,
@@ -131,11 +128,9 @@
 #'                   re_indicator = "re",
 #'                   ce_indicator = "ce",
 #'                   dfs_ce = 1:3,
-#'                   dfs_re = 1:3,
-#'                   tvc_ce_terms = list(pyridoxine = 1:3,
-#'                                       thiotepa   = 1:3),
-#'                   tvc_re_terms = list(pyridoxine = 1:3,
-#'                                       thiotepa   = 1:3),
+#'                   dfs_re = 2,
+#'                   tvc_ce_terms = list(thiotepa   = 1:2),
+#'                   tvc_re_terms = list(pyridoxine = 2),
 #'                   cluster  = "id",
 #'                   data     = bldr_stacked)
 #'
@@ -164,8 +159,12 @@ test_dfs_JointFPM <- function(surv,
              ce_indicator,
              df_ce = dfs_ce[[1]],
              df_re = dfs_re[[1]],
-             tvc_re_terms = lapply(tvc_re_terms, function(x)`[[`(x, 1)),
-             tvc_ce_terms = lapply(tvc_ce_terms, function(x)`[[`(x, 1)),
+             tvc_re_terms = if(is.null(tvc_re_terms)) NULL else {
+               lapply(tvc_re_terms, function(x)`[[`(x, 1))
+             },
+             tvc_ce_terms = if(is.null(tvc_ce_terms)) NULL else {
+               lapply(tvc_ce_terms, function(x)`[[`(x, 1))
+             },
              cluster,
              data)
 
@@ -181,11 +180,16 @@ test_dfs_JointFPM <- function(surv,
     seq_len(nrow(tmp)),
     function(i){
 
-      tvc_ce_terms <- as.list(tmp[i, 2 + seq_len(length(tvc_ce_terms)),
-                                  drop = FALSE])
-      tvc_re_terms <- as.list(tmp[i, 2 + length(tvc_ce_terms) +
-                                    seq_len(length(tvc_re_terms)),
-                                  drop = FALSE])
+      tvc_ce_terms <- if(is.null(tvc_ce_terms)) NULL else {
+        as.list(tmp[i, 2 + seq_len(length(tvc_ce_terms)),
+                    drop = FALSE])
+      }
+
+      tvc_re_terms <- if(is.null(tvc_re_terms)) NULL else {
+        as.list(tmp[i, 2 + length(tvc_ce_terms) +
+                      seq_len(length(tvc_re_terms)),
+                    drop = FALSE])
+      }
 
       test_df(surv,
               re_model,

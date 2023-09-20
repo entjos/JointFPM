@@ -227,8 +227,18 @@ JointFPM <- function(surv,
   model_formula <- rlang::new_formula(rlang::f_lhs(surv),
                                       rlang::parse_expr(comb_model_string))
 
-  tvc_formula <- rlang::new_formula(NULL, rlang::parse_expr(tvc_formula_string))
-  bh_formula  <- rlang::new_formula(NULL, rlang::parse_expr(smooth_formula_sting))
+  tvc_formula <- NULL
+  bh_formula  <- NULL
+
+  if(tvc_formula_string != ""){
+    tvc_formula <- rlang::new_formula(NULL,
+                                      rlang::parse_expr(tvc_formula_string))
+  }
+
+  if(smooth_formula_sting != ""){
+    bh_formula  <- rlang::new_formula(NULL,
+                                      rlang::parse_expr(smooth_formula_sting))
+  }
 
   fpm <- rstpm2::stpm2(model_formula,
                        df             = df_ce,
