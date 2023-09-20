@@ -118,7 +118,6 @@ bldr_re <- bldr_df[,
                         event = as.numeric(status == 1))]
 
 # Combine datasets into one stacked dataset
-
 bldr_stacked <- rbindlist(list(bldr_ce, bldr_re))
 
 bldr_stacked[, `:=`(pyridoxine = as.numeric(treatment == "pyridoxine"),
@@ -126,9 +125,7 @@ bldr_stacked[, `:=`(pyridoxine = as.numeric(treatment == "pyridoxine"),
 
 bldr_stacked$stop[bldr_stacked$stop == 0] <- 1 # Add one day survival
 
-# Print stacked dataset
-head(bldr_stacked)
-
+# Test different dfs
 test_dfs_JointFPM(Surv(time  = start,
                        time2 = stop,
                        event = event,
@@ -138,11 +135,9 @@ test_dfs_JointFPM(Surv(time  = start,
                   re_indicator = "re",
                   ce_indicator = "ce",
                   dfs_ce = 1:3,
-                  dfs_re = 1:3,
-                  tvc_ce_terms = list(pyridoxine = 1:3,
-                                      thiotepa   = 1:3),
-                  tvc_re_terms = list(pyridoxine = 1:3,
-                                      thiotepa   = 1:3),
+                  dfs_re = 2,
+                  tvc_ce_terms = list(thiotepa   = 1:2),
+                  tvc_re_terms = list(pyridoxine = 2),
                   cluster  = "id",
                   data     = bldr_stacked)
 
