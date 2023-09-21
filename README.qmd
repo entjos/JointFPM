@@ -3,6 +3,10 @@ format: gfm
 editor: visual
 ---
 
+<!-- badges: start -->
+  [![R-CMD-check](https://github.com/entjos/JointFPM/workflows/R-CMD-check/badge.svg)](https://github.com/entjos/JointFPM/actions)
+<!-- badges: end -->
+
 # Description
 
 This package includes functions for parametrically estimating the mean number of events in the presence of competing events. Researchers often disregard subsequent events in the competing risk setting although the event of interest might be of recurrent nature, e.g. heart attacks, strokes, complications etc.. One estimate of interest in this situation is the mean number of events in the presence of competing events, which can be estimated using the functions provided in this package.

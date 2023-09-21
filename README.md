@@ -1,4 +1,7 @@
-
+<!-- badges: start -->
+  [![R-CMD-check](https://github.com/entjos/JointFPM/workflows/R-CMD-check/badge.svg)](https://github.com/entjos/JointFPM/actions)
+<!-- badges: end -->
+  
 # Description
 
 This package includes functions for parametrically estimating the mean
