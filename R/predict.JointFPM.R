@@ -18,12 +18,12 @@
 #'    }
 #'
 #' @param newdata
-#'    A `data.frame` including the variable parameters for the prediction. One
+#'    A `data.frame` including the variable values used for the prediction. One
 #'    value for each variable used in either the recurrent or competing event
-#'    model is requierd
+#'    model is required.
 #'
 #' @param t
-#'    A vector defining the time points for the prediction.
+#'    A vector defining the time points used for the prediction.
 #'
 #' @param exposed
 #'    A function that takes `newdata` as an argument and creates a new dataset
@@ -31,8 +31,8 @@
 #'    Please see details for more information.
 #'
 #' @param ci_fit
-#'    Logical indicator for whether confidence intervalls should be obtained
-#'    for the fitted estimated using the delta method.
+#'    Logical indicator for whether confidence intervals should be estimated
+#'    for the fitted estimates using the delta method.
 #'
 #' @param ...
 #'    Added for compatibility with other predict functions.
@@ -40,10 +40,10 @@
 #' @details
 #'    The function required for the `exposed` argument must take the `newdata`
 #'    dataset as argument and transform it to a new dataset that defines the
-#'    exposed group. If we assume that we have a model with one variable `trt`,
-#'    which is a 0/1 coded treatment indicator. If we would like to obtain
-#'    the difference in mean number of events comparing untreated to treated
-#'    we could use the following function assuming that
+#'    exposed group. Assume we assume that we have a model with one variable
+#'    `trt` which is a 0/1 coded treatment indicator. If we would like to obtain
+#'    the difference in mean number of events comparing the untreated to treated
+#'    group we could use the following function assuming that
 #'    `newdata = data.frame(trt = 0)`:
 #'    ```
 #'    function(x){transform(x, trt = 1)}

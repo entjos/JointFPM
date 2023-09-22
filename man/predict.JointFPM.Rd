@@ -17,18 +17,18 @@ options are:
 between exposed and unexposed at time(s) \code{t}.}
 }}
 
-\item{newdata}{A \code{data.frame} including the variable parameters for the prediction. One
+\item{newdata}{A \code{data.frame} including the variable values used for the prediction. One
 value for each variable used in either the recurrent or competing event
-model is requierd}
+model is required.}
 
-\item{t}{A vector defining the time points for the prediction.}
+\item{t}{A vector defining the time points used for the prediction.}
 
 \item{exposed}{A function that takes \code{newdata} as an argument and creates a new dataset
 for the exposed group. This argument is required if \code{type = 'diff'}.
 Please see details for more information.}
 
-\item{ci_fit}{Logical indicator for whether confidence intervalls should be obtained
-for the fitted estimated using the delta method.}
+\item{ci_fit}{Logical indicator for whether confidence intervals should be estimated
+for the fitted estimates using the delta method.}
 
 \item{...}{Added for compatibility with other predict functions.}
 }
@@ -49,10 +49,10 @@ time points is supported.
 \details{
 The function required for the \code{exposed} argument must take the \code{newdata}
 dataset as argument and transform it to a new dataset that defines the
-exposed group. If we assume that we have a model with one variable \code{trt},
-which is a 0/1 coded treatment indicator. If we would like to obtain
-the difference in mean number of events comparing untreated to treated
-we could use the following function assuming that
+exposed group. Assume we assume that we have a model with one variable
+\code{trt} which is a 0/1 coded treatment indicator. If we would like to obtain
+the difference in mean number of events comparing the untreated to treated
+group we could use the following function assuming that
 \code{newdata = data.frame(trt = 0)}:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{function(x)\{transform(x, trt = 1)\}

@@ -45,7 +45,7 @@
 #'      \item{`df_re`: }{The number of knots for the baseline intensity function
 #'      of the recurrent event,}
 #'      \item{`aic`: }{The AIC value of the model fit,}
-#'      \item{`bic`: }{The BIC value of the model fit,}
+#'      \item{`bic`: }{The BIC value of the model fit.}
 #'    }
 #'
 #' @import rstpm2

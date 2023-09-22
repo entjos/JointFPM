@@ -16,15 +16,15 @@ mean_no(
 \arguments{
 \item{formula}{A formula passed to \code{survfit}.}
 
-\item{re_indicator}{The name of a variable indicating that these rows in the dataset belongs
-to the risksets for the recurrent event.}
+\item{re_indicator}{The name of a variable indicating that these rows in the dataset belong
+to the risksets of the recurrent event process.}
 
-\item{ce_indicator}{The name of a variable indicating that these rows in the datasets belongs
-to the riskset for the competing event.}
+\item{ce_indicator}{The name of a variable indicating that these rows in the datasets belong
+to the riskset of the competing event process.}
 
 \item{data}{A \code{data.frame} in stacked format. The dataset needs to include one row
 for the competing event and one row for each risk episode of the
-recurrent event}
+recurrent event.}
 
 \item{re_control}{An optional \code{list} with arguments passed to \code{survfit} when computing
 risksets for the recurrent event.}

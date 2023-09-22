@@ -17,7 +17,7 @@ Date: 2023-09-19
 Description: Implementation of a parametric joint model for modelling recurrent
   and competing event processes using generalised survival models. The joint
   model can subsequently be used to predict the mean number of events in the
-  presence of competing risks at different time points. Comparisions of the mean
+  presence of competing risks at different time points. Comparisons of the mean
   number of event functions, e.g. the differences in mean number of events
   between two exposure groups, are also available.
 URL: https://github.com/entjos/JointFPM

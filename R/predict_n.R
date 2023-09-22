@@ -8,7 +8,7 @@
 #'    A `stpm2` object extracted from a `JointFPM` model.
 #'
 #' @param t
-#'    A vector of times for which the estimate should be predicted.
+#'    A vector of times used for the prediction.
 #'
 #' @param lambda_dta
 #'    A `data.frame` used to predict the intensity function for the recurrent
@@ -19,7 +19,7 @@
 #'    event process.
 #'
 #' @return
-#'    A numeric vector the same length as t including the estimates of the
+#'    A numeric vector of the same length as t including the estimates of the
 #'    derivative of E[N(t)].
 #'
 #' @import rstpm2

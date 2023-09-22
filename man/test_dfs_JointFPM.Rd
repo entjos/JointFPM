@@ -23,12 +23,12 @@ test_dfs_JointFPM(
 The \code{Surv} objects needs to be of \code{type ==  'counting'} with the
 following arguments:
 \itemize{
-\item{\code{time}: }{Start of follow-up time for each event episode, i.e.
+\item{\code{time}: }{Start of follow-up time for each event episode, i.e.,
 usually 0 for the competing event and the first occurrence of the
 recurrent event. For every subsequent event the follow-up can either
 be 0 if gap time is the underlying time scale or the time of the
 previous event if total time is the underlying time scale.}
-\item{\code{time2}: }{End of follow-up, i.e. either occurrence of a terminal
+\item{\code{time2}: }{End of follow-up, i.e., either occurrence of a terminal
 or recurrent event, or time of censoring.}
 \item{\code{status}: }{Event indicator for both terminal and recurrent
 event.}
@@ -36,10 +36,10 @@ event.}
 }}
 
 \item{re_model}{A formula object specifying the model for the recurrent event
-with an empty right hand side of the formula. E.g. \code{~ sex}.}
+with an empty right hand side of the formula, e.g. \code{~ sex}.}
 
 \item{ce_model}{A formula object specifying the model for the competing event
-with an empty right hand side of the formula. E.g. \code{~ sex}.}
+with an empty right hand side of the formula, e.g. \code{~ sex}.}
 
 \item{re_indicator}{Indicator that defined which rows in the dataset belong to the recurrent
 event process. These are usually more than one row per observations.
@@ -62,7 +62,7 @@ This list should be of form \verb{list(<var_name> = <no. of knots>)}.}
 time-varying effects of variables included in the competing event model.
 This list should be of form \verb{list(<var_name> = <no. of knots>)}.}
 
-\item{cluster}{A chacter vector specifying the name of the variable that defines unique
+\item{cluster}{A chara vector specifying the name of the variable that defines unique
 observation in the dataset passed to the function.}
 
 \item{data}{A stacked dataset that including both data on the recurrent and competing
@@ -85,13 +85,13 @@ times and event indicator for the recurrent event, e.g.:
 }\if{html}{\out{</div>}}}
 }
 \value{
-A \code{data.frame} with one row per combination of baseline hazards
-and tvc dfs and the corresponding AIC and BIC. If the \code{by_vars}
-argument is specified a \code{list} of \code{data.frame}s with one \code{data.frame}
-for each strata will be returned.
+A \code{data.frame} with one row per combination of baseline hazards DFs,
+and the DFs of the time varying covariates, and the corresponding
+AIC and BIC.
 }
 \description{
-Test of degrees of freedom (DFs) joint flexible parametric survival models
+Test of different degrees of freedoms (DFs) for joint flexible parametric
+survival models.
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

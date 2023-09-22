@@ -7,17 +7,17 @@
 #'    A formula passed to `survfit`.
 #'
 #' @param re_indicator
-#'    The name of a variable indicating that these rows in the dataset belongs
-#'    to the risksets for the recurrent event.
+#'    The name of a variable indicating that these rows in the dataset belong
+#'    to the risksets of the recurrent event process.
 #'
 #' @param ce_indicator
-#'    The name of a variable indicating that these rows in the datasets belongs
-#'    to the riskset for the competing event.
+#'    The name of a variable indicating that these rows in the datasets belong
+#'    to the riskset of the competing event process.
 #'
 #' @param data
 #'    A `data.frame` in stacked format. The dataset needs to include one row
 #'    for the competing event and one row for each risk episode of the
-#'    recurrent event
+#'    recurrent event.
 #'
 #' @param re_control
 #'    An optional `list` with arguments passed to `survfit` when computing

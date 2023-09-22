@@ -11,12 +11,12 @@
 #'    The `Surv` objects needs to be of `type ==  'counting'` with the
 #'    following arguments:
 #'    \itemize{
-#'      \item{`time`: }{Start of follow-up time for each event episode, i.e.
+#'      \item{`time`: }{Start of follow-up time for each event episode, i.e.,
 #'      usually 0 for the competing event and the first occurrence of the
 #'      recurrent event. For every subsequent event the follow-up can either
 #'      be 0 if gap time is the underlying time scale or the time of the
 #'      previous event if total time is the underlying time scale.}
-#'      \item{`time2`: }{End of follow-up, i.e. either occurrence of a terminal
+#'      \item{`time2`: }{End of follow-up, i.e., either occurrence of a terminal
 #'      or recurrent event, or time of censoring.}
 #'      \item{`status`: }{Event indicator for both terminal and recurrent
 #'      event.}
@@ -25,19 +25,19 @@
 #'
 #' @param re_model
 #'    A formula object specifying the model for the recurrent event
-#'    with an empty right hand side of the formula. E.g. `~ sex`.
+#'    with an empty right hand side of the formula, e.g. `~ sex`.
 #'
 #' @param ce_model
 #'    A formula object specifying the model for the competing event
-#'    with an empty right hand side of the formula. E.g. `~ sex`.
+#'    with an empty right hand side of the formula, e.g. `~ sex`.
 #'
 #' @param re_indicator
-#'    Indicator that defined which rows in the dataset belong to the recurrent
+#'    Indicator that defines which rows in the dataset belong to the recurrent
 #'    event process. These are usually more than one row per observations.
 #'    The variable name needs to be passed as a character vector.
 #'
 #' @param ce_indicator
-#'    Indicator that defined which row in the dataset belong to the competing
+#'    Indicator that defines which row in the dataset belong to the competing
 #'    event process. The variable name needs to be passed as a character vector.
 #'
 #' @param df_ce
@@ -59,11 +59,11 @@
 #'    This list should be of form `list(<var_name> = <no. of knots>)`.
 #'
 #' @param cluster
-#'    A chacter vector specifying the name of the variable that defines unique
-#'    observation in the dataset passed to the function.
+#'    A character vector specifying the name of the variable that defines unique
+#'    observations in the dataset passed to the function.
 #'
 #' @param data
-#'    A stacked dataset that including both data on the recurrent and competing
+#'    A stacked dataset that includes both data on the recurrent and competing
 #'    event process. The dataset should have one row for each observation
 #'    including the follow-up time and event indicator for the competing event
 #'    and possibly multiple rows for each observation including the follow-up
