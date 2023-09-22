@@ -3,8 +3,9 @@
 ## Resubmission
 
 This is a resubmission. In this version I have:
-- Changed the beginning sentence of the description file.
-- Removed unnecessary line breaks from the description file.
+- Changed the beginning sentence of the description file.,
+- Removed unnecessary line breaks from the description file,
+- Fixed typos in the description and help files.
 
 Currently, there are no references for the methods implemented in JointFPM
 available.
