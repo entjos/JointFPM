@@ -20,7 +20,8 @@ Description: Implementation of a parametric joint model for modelling recurrent
   presence of competing risks at different time points. Comparisons of the mean
   number of event functions, e.g. the differences in mean number of events
   between two exposure groups, are also available.
-URL: https://github.com/entjos/JointFPM
+URL: https://github.com/entjos/JointFPM,
+    https://entjos.github.io/JointFPM/
 BugReports: https://github.com/entjos/JointFPM/issues
 License: CC BY 4.0
 Encoding: UTF-8
