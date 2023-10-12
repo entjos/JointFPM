@@ -32,8 +32,16 @@ change throughout the process.
 
 For installing the package from CRAN please use
 
+``` r
+install.packages("JointFPM")
+```
+
 If you would like to use the latest development version from GitHub
 please use
+
+``` r
+remotes::install_github("entjos/JointFPM")
+```
 
 # Short Example
 

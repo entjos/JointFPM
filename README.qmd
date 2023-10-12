@@ -24,13 +24,13 @@ Please note that this package is currently under development and might change th
 
 For installing the package from CRAN please use
 
-```{R eval=FALSE, include=FALSE}
+```{R eval=FALSE, include=TRUE}
 install.packages("JointFPM")
 ```
 
 If you would like to use the latest development version from GitHub please use
 
-```{R eval=FALSE, include=FALSE}
+```{R eval=FALSE, include=TRUE}
 remotes::install_github("entjos/JointFPM")
 ```
 
