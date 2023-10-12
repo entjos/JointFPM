@@ -59,39 +59,6 @@
 #'    }
 #'
 #' @examples
-#' library(data.table) # For data preparations
-#'
-#' # Load bladder cancer dataset from survival package
-#' bldr_df <- as.data.table(survival::bladder1)
-#' bldr_df <- bldr_df[, .(id, treatment, start, stop, status)]
-#'
-#' # Define dataset for competing event times
-#' bldr_ce <- bldr_df[, .SD[stop == max(stop)],
-#'                    by = id]
-#'
-#' bldr_ce[, `:=`(ce = 1,
-#'                re = 0,
-#'                event = as.numeric(status %in% 2:3),
-#'                start = 0)]
-#'
-#' # Define dataset for bladder cancer recurrences
-#' bldr_re <- bldr_df[,
-#'                    `:=`(ce = 0,
-#'                         re = 1,
-#'                         event = as.numeric(status == 1))]
-#'
-#' # Combine datasets into one stacked dataset
-#'
-#' bldr_stacked <- rbindlist(list(bldr_ce, bldr_re))
-#'
-#' bldr_stacked[, `:=`(pyridoxine = as.numeric(treatment == "pyridoxine"),
-#'                     thiotepa   = as.numeric(treatment == "thiotepa"))]
-#'
-#' bldr_stacked$stop[bldr_stacked$stop == 0] <- 1 # Add one day survival
-#'
-#' # Print stacked dataset
-#' head(bldr_stacked)
-#'
 #' bldr_model <- JointFPM(Surv(time  = start,
 #'                             time2 = stop,
 #'                             event = event,
@@ -103,7 +70,7 @@
 #'                        df_ce = 3,
 #'                        df_re = 3,
 #'                        cluster  = "id",
-#'                        data     = bldr_stacked)
+#'                        data     = bladder1_stacked)
 #'
 #' predict(bldr_model,
 #'         newdata = data.frame(pyridoxine = 1,
@@ -178,7 +145,7 @@ predict.JointFPM <- function(object,
 
     tmp_newdata_e1 <- tmp_newdata_e0
     tmp_newdata_e1$st_dta     <- do.call(exposed, list(tmp_newdata_e1$st_dta))
-    tmp_newdata_e1$lambda_dta <- do.call(exposed, list(tmp_newdata_e1$st_dta))
+    tmp_newdata_e1$lambda_dta <- do.call(exposed, list(tmp_newdata_e1$lambda_dta))
 
     # Use Delta Method to obtain confidence intervals for E[N]
     if(ci_fit){
