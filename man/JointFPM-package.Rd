@@ -12,6 +12,7 @@ Implementation of a parametric joint model for modelling recurrent and competing
 Useful links:
 \itemize{
   \item \url{https://github.com/entjos/JointFPM}
+  \item \url{https://entjos.github.io/JointFPM/}
   \item Report bugs at \url{https://github.com/entjos/JointFPM/issues}
 }
 
