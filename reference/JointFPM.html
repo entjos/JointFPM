@@ -80,17 +80,26 @@ events at different time points. This function is a wrapper around
     <dl><dt>surv</dt>
 <dd><p>A formula of the following form <code>Surv(...) ~ 1</code>.
 The <code>Surv</code> objects needs to be of <code>type ==  'counting'</code> with the
-following arguments:</p><ul><li><p><code>time</code>: Start of follow-up time for each event episode, i.e.,
+following arguments:</p><dl><dt><code>time</code>: </dt>
+<dd><p>Start of follow-up time for each event episode, i.e.,
 usually 0 for the competing event and the first occurrence of the
 recurrent event. For every subsequent event the follow-up can either
 be 0 if gap time is the underlying time scale or the time of the
-previous event if total time is the underlying time scale.</p></li>
-<li><p><code>time2</code>: End of follow-up, i.e., either occurrence of a terminal
-or recurrent event, or time of censoring.</p></li>
-<li><p><code>status</code>: Event indicator for both terminal and recurrent
-event.</p></li>
-<li><p><code>type</code>: Has to be <code>counting</code>.</p></li>
-</ul></dd>
+previous event if total time is the underlying time scale.</p></dd>
+
+<dt><code>time2</code>: </dt>
+<dd><p>End of follow-up, i.e., either occurrence of a terminal
+or recurrent event, or time of censoring.</p></dd>
+
+<dt><code>status</code>: </dt>
+<dd><p>Event indicator for both terminal and recurrent
+event.</p></dd>
+
+<dt><code>type</code>: </dt>
+<dd><p>Has to be <code>counting</code>.</p></dd>
+
+
+</dl></dd>
 
 
 <dt>re_model</dt>
@@ -214,7 +223,7 @@ event</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ce:thiotepa:nsx(log(stop), 2)1   ce:thiotepa:nsx(log(stop), 2)2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       0.90885411                       1.05531401 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> re:pyridoxine:nsx(log(stop), 2)1 re:pyridoxine:nsx(log(stop), 2)2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      -0.23787431                      -0.08296329 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      -0.23787432                      -0.08296329 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   re:thiotepa:nsx(log(stop), 2)1   re:thiotepa:nsx(log(stop), 2)2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      -2.34781263                      -0.42711985 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
