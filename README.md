@@ -1,9 +1,13 @@
+
 <!-- badges: start -->
-  [![R-CMD-check](https://github.com/entjos/JointFPM/workflows/R-CMD-check/badge.svg)](https://github.com/entjos/JointFPM/actions)
-[![CRAN status](https://www.r-pkg.org/badges/version/JointFPM)](https://CRAN.R-project.org/package=JointFPM)
-[![](https://cranlogs.r-pkg.org/badges/JointFPM)](https://cran.r-project.org/package=JointFPM)
+
+[![R-CMD-check](https://github.com/entjos/JointFPM/workflows/R-CMD-check/badge.svg)](https://github.com/entjos/JointFPM/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/JointFPM.png)](https://CRAN.R-project.org/package=JointFPM)
+[![](https://cranlogs.r-pkg.org/badges/JointFPM.png)](https://cran.r-project.org/package=JointFPM)
+
 <!-- badges: end -->
-  
+
 # Description
 
 This package includes functions for parametrically estimating the mean
@@ -28,15 +32,8 @@ change throughout the process.
 
 For installing the package from CRAN please use
 
-``` r
-install.packages("JointFPM")
-```
-
-If you would like to use the latest development version from GitHub please use
-
-``` r
-remotes::install_github("entjos/JointFPM")
-```
+If you would like to use the latest development version from GitHub
+please use
 
 # Short Example
 
@@ -118,9 +115,10 @@ bldr_model <- JointFPM(Surv(time  = start,
 ```
 
 Based on the model we can predict the mean number of events at different
-time points and covariate patterns. Please note the estimation of confidence 
-intervals for the mean number of events is computer intensive. The following 
-code might take some minutes to run on your machine.
+time points and covariate patterns. Please note the estimation of
+confidence intervals for the mean number of events is computer
+intensive. The following code might take some minutes to run on your
+machine.
 
 ``` r
 predict(bldr_model,
@@ -130,9 +128,9 @@ predict(bldr_model,
 ```
 
       stop       fit       lci       uci
-    1   10 0.6068153 0.2866777 0.9269528
-    2   20 1.1156503 0.5334427 1.6978580
-    3   50 2.3789320 1.0343114 3.7235525
+    1   10 0.6068452 0.2866913 0.9269992
+    2   20 1.1157394 0.5335082 1.6979705
+    3   50 2.3793386 1.0346551 3.7240220
 
 # Bugs
 

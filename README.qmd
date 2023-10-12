@@ -5,9 +5,8 @@ editor: visual
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/entjos/JointFPM/workflows/R-CMD-check/badge.svg)](https://github.com/entjos/JointFPM/actions)
-[![CRAN status](https://www.r-pkg.org/badges/version/JointFPM)](https://CRAN.R-project.org/package=JointFPM)
-[![](https://cranlogs.r-pkg.org/badges/JointFPM)](https://cran.r-project.org/package=JointFPM)
+[![R-CMD-check](https://github.com/entjos/JointFPM/workflows/R-CMD-check/badge.svg)](https://github.com/entjos/JointFPM/actions) [![CRAN status](https://www.r-pkg.org/badges/version/JointFPM)](https://CRAN.R-project.org/package=JointFPM) [![](https://cranlogs.r-pkg.org/badges/JointFPM)](https://cran.r-project.org/package=JointFPM)
+
 <!-- badges: end -->
 
 # Description
@@ -25,13 +24,13 @@ Please note that this package is currently under development and might change th
 
 For installing the package from CRAN please use
 
-```{R}
+```{R eval=FALSE, include=FALSE}
 install.packages("JointFPM")
 ```
 
 If you would like to use the latest development version from GitHub please use
 
-```{R}
+```{R eval=FALSE, include=FALSE}
 remotes::install_github("entjos/JointFPM")
 ```
 
