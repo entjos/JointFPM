@@ -36,7 +36,7 @@
     
     <a class="navbar-brand me-2" href="index.html">JointFPM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,13 +87,17 @@
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <p>For installing the package from CRAN please use</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"JointFPM"</span><span class="op">)</span></span></code></pre></div>
 <p>If you would like to use the latest development version from GitHub please use</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"entjos/JointFPM"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="short-example">Short Example<a class="anchor" aria-label="anchor" href="#short-example"></a>
 </h1>
 <p>We will use a dataset of bladder cancer recurrences for the following example. The dataset is included in the <a href="https://github.com/therneau/survival" class="external-link">survival</a> package and includes information on bladder cancer patients receiving three different treatments: placebo, Pyridoxine, and Thiotepa (cf. <code>help(survival::bladder1)</code>).In order to fit a joint FPM we first need to reshape the dataset into a stacked format, i.e. each observation needs to have one row for the competing event and possible multiple rows for the recurrent event. In the example below we use the <a href="https://r-datatable.com" class="external-link">data.table</a> package for the data preparation.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/entjos/JointFPM" class="external-link">JointFPM</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span> <span class="co"># For data preparations</span></span>
@@ -128,15 +132,15 @@
 <span></span>
 <span><span class="co"># Print stacked dataset</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bldr_stacked</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>   id treatment start stop status ce re event pyridoxine thiotepa</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span>  <span class="dv">1</span>   placebo     <span class="dv">0</span>    <span class="dv">1</span>      <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">1</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span>  <span class="dv">2</span>   placebo     <span class="dv">0</span>    <span class="dv">1</span>      <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">1</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">:</span>  <span class="dv">3</span>   placebo     <span class="dv">0</span>    <span class="dv">4</span>      <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">0</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">:</span>  <span class="dv">4</span>   placebo     <span class="dv">0</span>    <span class="dv">7</span>      <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">0</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">:</span>  <span class="dv">5</span>   placebo     <span class="dv">0</span>   <span class="dv">10</span>      <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">1</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="dv">6</span><span class="sc">:</span>  <span class="dv">6</span>   placebo     <span class="dv">0</span>   <span class="dv">10</span>      <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">1</span>          <span class="dv">0</span>        <span class="dv">0</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>   id treatment start stop status ce re event pyridoxine thiotepa</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span>  <span class="dv">1</span>   placebo     <span class="dv">0</span>    <span class="dv">1</span>      <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">1</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span>  <span class="dv">2</span>   placebo     <span class="dv">0</span>    <span class="dv">1</span>      <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">1</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">:</span>  <span class="dv">3</span>   placebo     <span class="dv">0</span>    <span class="dv">4</span>      <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">0</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">:</span>  <span class="dv">4</span>   placebo     <span class="dv">0</span>    <span class="dv">7</span>      <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">0</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">:</span>  <span class="dv">5</span>   placebo     <span class="dv">0</span>   <span class="dv">10</span>      <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">1</span>          <span class="dv">0</span>        <span class="dv">0</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dv">6</span><span class="sc">:</span>  <span class="dv">6</span>   placebo     <span class="dv">0</span>   <span class="dv">10</span>      <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>     <span class="dv">1</span>          <span class="dv">0</span>        <span class="dv">0</span></span></code></pre></div>
 <p>The next step is to fit a joint flexible parametric model using the stacked dataset.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bldr_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/JointFPM.html">JointFPM</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span>time  <span class="op">=</span> <span class="va">start</span>,</span>
 <span>                            time2 <span class="op">=</span> <span class="va">stop</span>, </span>
 <span>                            event <span class="op">=</span> <span class="va">event</span>,</span>
@@ -154,15 +158,15 @@
 <span>                       cluster  <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>                       data     <span class="op">=</span> <span class="va">bldr_stacked</span><span class="op">)</span></span></code></pre></div>
 <p>Based on the model we can predict the mean number of events at different time points and covariate patterns. Please note the estimation of confidence intervals for the mean number of events is computer intensive. The following code might take some minutes to run on your machine.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bldr_model</span>,</span>
 <span>        newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>pyridoxine <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>                             thiotepa   <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
 <span>        t <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  stop       fit       lci       uci</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>   <span class="dv">10</span> <span class="fl">0.6068452</span> <span class="fl">0.2866913</span> <span class="fl">0.9269992</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span>   <span class="dv">20</span> <span class="fl">1.1157394</span> <span class="fl">0.5335082</span> <span class="fl">1.6979705</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span>   <span class="dv">50</span> <span class="fl">2.3793386</span> <span class="fl">1.0346551</span> <span class="fl">3.7240220</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  stop       fit       lci       uci</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>   <span class="dv">10</span> <span class="fl">0.6068452</span> <span class="fl">0.2866913</span> <span class="fl">0.9269992</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span>   <span class="dv">20</span> <span class="fl">1.1157394</span> <span class="fl">0.5335082</span> <span class="fl">1.6979705</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span>   <span class="dv">50</span> <span class="fl">2.3793386</span> <span class="fl">1.0346551</span> <span class="fl">3.7240220</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="bugs">Bugs<a class="anchor" aria-label="anchor" href="#bugs"></a>
