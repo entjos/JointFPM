@@ -11,7 +11,7 @@ test_that("Mean number of events in bladder did not change",{
                            df_ce = 3,
                            df_re = 3,
                            cluster  = "id",
-                           data     = bldr_stacked)
+                           data     = bladder1_stacked)
 
     predict(bldr_model,
             newdata = data.frame(pyridoxine = 1,
@@ -34,7 +34,7 @@ test_that("Difference is correct",{
                            df_ce = 3,
                            df_re = 3,
                            cluster  = "id",
-                           data     = bldr_stacked)
+                           data     = bladder1_stacked)
 
     predict(bldr_model,
             type = "diff",
@@ -56,7 +56,7 @@ test_that("Difference is correct",{
                            df_ce = 3,
                            df_re = 3,
                            cluster  = "id",
-                           data     = bldr_stacked)
+                           data     = bladder1_stacked)
 
     e0 <- predict(bldr_model,
                   newdata = data.frame(pyridoxine = 1,
