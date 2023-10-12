@@ -34,7 +34,7 @@ for the fitted estimates using the delta method.}
 }
 \value{
 A \code{data.frame} with the following columns:
-\itemize{
+\describe{
 \item{\code{t}: }{The time for the prediction,}
 \item{\code{fit}: }{The point estimate of the prediction,}
 \item{\code{lci}: }{The lower confidence interval limit,}

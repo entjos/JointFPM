@@ -51,7 +51,7 @@
 #'
 #' @return
 #'    A `data.frame` with the following columns:
-#'    \itemize{
+#'    \describe{
 #'      \item{`t`: }{The time for the prediction,}
 #'      \item{`fit`: }{The point estimate of the prediction,}
 #'      \item{`lci`: }{The lower confidence interval limit,}

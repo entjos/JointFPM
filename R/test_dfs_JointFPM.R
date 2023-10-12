@@ -10,7 +10,7 @@
 #'    A formula of the following form `Surv(...) ~ 1`.
 #'    The `Surv` objects needs to be of `type ==  'counting'` with the
 #'    following arguments:
-#'    \itemize{
+#'    \describe{
 #'      \item{`time`: }{Start of follow-up time for each event episode, i.e.,
 #'      usually 0 for the competing event and the first occurrence of the
 #'      recurrent event. For every subsequent event the follow-up can either
@@ -21,7 +21,7 @@
 #'      \item{`status`: }{Event indicator for both terminal and recurrent
 #'      event.}
 #'      \item{`type`: }{Has to be `counting`.}
-#'    }
+#' }
 #'
 #' @param re_model
 #'    A formula object specifying the model for the recurrent event

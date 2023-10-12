@@ -22,7 +22,7 @@ test_dfs_JointFPM(
 \item{surv}{A formula of the following form \code{Surv(...) ~ 1}.
 The \code{Surv} objects needs to be of \code{type ==  'counting'} with the
 following arguments:
-\itemize{
+\describe{
 \item{\code{time}: }{Start of follow-up time for each event episode, i.e.,
 usually 0 for the competing event and the first occurrence of the
 recurrent event. For every subsequent event the follow-up can either
