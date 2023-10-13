@@ -85,7 +85,7 @@
 #'
 #' @return
 #'    An object of class `JointFPM` with the following elements:
-#'    \itemize{
+#'    \describe{
 #'      \item{`model`: }{The fitted FPM object,}
 #'      \item{`re_terms`: }{The terms used to model the recurrent event model,}
 #'      \item{`ce_terms`: }{The terms used to model the competing event model,}

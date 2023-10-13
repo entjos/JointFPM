@@ -11,7 +11,7 @@
 #' @param type
 #'    A character vector defining the estimate of interest. Currently available
 #'    options are:
-#'    \itemize{
+#'    \describe{
 #'       \item{`mean_no`: }{Estimates the mean number of events at time(s) `t`.}
 #'       \item{`diff`: }{Estimates the difference in mean number of events
 #'       between exposed and unexposed at time(s) `t`.}
