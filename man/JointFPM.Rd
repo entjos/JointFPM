@@ -86,7 +86,7 @@ times and event indicator for the recurrent event, e.g.:
 }
 \value{
 An object of class \code{JointFPM} with the following elements:
-\itemize{
+\describe{
 \item{\code{model}: }{The fitted FPM object,}
 \item{\code{re_terms}: }{The terms used to model the recurrent event model,}
 \item{\code{ce_terms}: }{The terms used to model the competing event model,}
