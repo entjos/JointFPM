@@ -2,9 +2,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/entjos/JointFPM/workflows/R-CMD-check/badge.svg)](https://github.com/entjos/JointFPM/actions)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/JointFPM.png)](https://CRAN.R-project.org/package=JointFPM)
-[![](https://cranlogs.r-pkg.org/badges/JointFPM.png)](https://cran.r-project.org/package=JointFPM)
+[![CRAN status](https://www.r-pkg.org/badges/version/JointFPM)](https://CRAN.R-project.org/package=JointFPM)
+[![](https://cranlogs.r-pkg.org/badges/JointFPM)](https://cran.r-project.org/package=JointFPM)
 
 <!-- badges: end -->
 
