@@ -106,7 +106,7 @@ predict.JointFPM <- function(object,
                      all.vars(object$ce_model),
                      object$cluster))
 
-    target_pop <- as.data.table(object$model@data)[, .SD, .SDcols = vars]
+    target_pop <- data.table::as.data.table(object$model@data)[, .SD, .SDcols = vars]
 
 
     for(i in seq_along(colnames(newdata))){
