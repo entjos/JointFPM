@@ -15,11 +15,14 @@ options are:
 \item{\code{mean_no}: }{Estimates the mean number of events at time(s) \code{t}.}
 \item{\code{diff}: }{Estimates the difference in mean number of events
 between exposed and unexposed at time(s) \code{t}.}
+\item{\code{marg_mean_no}: }{Estimates the marginal mean number of events.}
 }}
 
-\item{newdata}{A \code{data.frame} including the variable values used for the prediction. One
-value for each variable used in either the recurrent or competing event
-model is required.}
+\item{newdata}{A \code{data.frame} with one row including the variable values used for t
+he prediction. One value for each variable used in either the recurrent or
+competing event model is required when predicting \code{mean_no} or \code{diff}.
+For \code{marg_mean_no}, this includes the variable that you would like your
+marginal estimate to be conditioned on.}
 
 \item{t}{A vector defining the time points used for the prediction.}
 

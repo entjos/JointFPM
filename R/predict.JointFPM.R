@@ -15,12 +15,15 @@
 #'       \item{`mean_no`: }{Estimates the mean number of events at time(s) `t`.}
 #'       \item{`diff`: }{Estimates the difference in mean number of events
 #'       between exposed and unexposed at time(s) `t`.}
+#'       \item{`marg_mean_no`: }{Estimates the marginal mean number of events.}
 #'    }
 #'
 #' @param newdata
-#'    A `data.frame` including the variable values used for the prediction. One
-#'    value for each variable used in either the recurrent or competing event
-#'    model is required.
+#'    A `data.frame` with one row including the variable values used for t
+#'    he prediction. One value for each variable used in either the recurrent or
+#'    competing event model is required when predicting `mean_no` or `diff`.
+#'    For `marg_mean_no`, this includes the variable that you would like your
+#'    marginal estimate to be conditioned on.
 #'
 #' @param t
 #'    A vector defining the time points used for the prediction.
@@ -95,6 +98,29 @@ predict.JointFPM <- function(object,
   # Prepare data for prediction
   tmp_newdata <- list()
 
+  if(type == "marg_mean_no"){
+
+    vars <- unique(c(all.vars(object$re_model),
+                     all.vars(object$ce_model),
+                     object$cluster))
+
+    target_pop <- as.data.table(object$model@data)[, .SD, .SDcols = vars]
+
+
+    for(i in seq_along(colnames(newdata))){
+      set(target_pop, j = colnames(newdata)[[i]], value = newdata[1,i])
+    }
+
+    newdata <- unique(target_pop, by = object$cluster)
+    data.table::set(newdata, j = object$cluster, value = NULL)
+    newdata <- newdata[, .N, by = names(newdata)]
+
+    pop_weights <- newdata$N
+
+    newdata[, N := NULL]
+
+  }
+
   tmp_newdata$st_dta <- cbind(newdata, 1, 0)
   colnames(tmp_newdata$st_dta) <- c(names(newdata),
                                     object$ce_indicator,
@@ -167,6 +193,57 @@ predict.JointFPM <- function(object,
                    st_dta     = tmp_newdata_e1$st_dta)
 
       est <- e0-e1
+    }
+
+  }
+
+  if(type == "marg_mean_no"){
+
+    # Use Delta Method to obtain confidence intervals for E[N]
+    if(ci_fit){
+
+      est <- rstpm2::predictnl(
+        object$model,
+        fun = function(obj, ...){
+
+          temp_estimates <- lapply(
+            seq_len(nrow(newdata)),
+            function(i){
+              N <- calc_N(
+                obj, t,
+                lambda_dta = tmp_newdata$lambda_dta[i,],
+                st_dta     = tmp_newdata$st_dta[i, ]
+              )
+              data.frame(t, N)
+            }
+          ) |> data.table::rbindlist()
+
+          temp_estimates[,
+                         list(est = stats::weighted.mean(N, ..pop_weights)),
+                         by = t][["est"]]
+
+        }
+      )
+
+    } else {
+
+      temp_estimates <- lapply(
+        seq_len(nrow(newdata)),
+        function(i){
+          N <- calc_N(
+            object$model, t,
+            lambda_dta = tmp_newdata$lambda_dta[i,],
+            st_dta     = tmp_newdata$st_dta[i, ]
+          )
+
+          data.frame(t, N)
+        }
+      ) |> data.table::rbindlist()
+
+      est <- temp_estimates[,
+                            list(est = stats::weighted.mean(N, ..pop_weights)),
+                            by = t][["est"]]
+
     }
 
   }

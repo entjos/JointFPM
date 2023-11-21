@@ -216,8 +216,11 @@ JointFPM <- function(surv,
                        data    = data)
 
   out <- list(model        = fpm,
+              re_model     = re_model,
+              ce_model     = ce_model,
               re_indicator = re_indicator,
-              ce_indicator = ce_indicator)
+              ce_indicator = ce_indicator,
+              cluster      = cluster)
 
   # Define class of output object
   class(out) <- "JointFPM"

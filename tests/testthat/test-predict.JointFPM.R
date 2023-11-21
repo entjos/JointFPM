@@ -73,3 +73,98 @@ test_that("Difference is correct",{
     e0$fit - e1$fit
   })
 })
+
+test_that("S_M(t|x) == S(t|x)", {
+  expect_equal({
+
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(10),
+            type = "mean_no",
+            ci_fit  = FALSE)
+
+  }, {
+
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(10),
+            type = "marg_mean_no",
+            ci_fit  = FALSE)
+
+  })
+})
+
+test_that("Point estimate is the same if ci_fit == TRUE or FALSE", {
+  expect_equal({
+
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(10),
+            type = "marg_mean_no",
+            ci_fit  = TRUE)$est
+  }, {
+
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(10),
+            type = "marg_mean_no",
+            ci_fit  = FALSE)$est
+
+  })
+})
