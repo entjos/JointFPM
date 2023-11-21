@@ -13,7 +13,7 @@ test_that("Test model with same varaibles for re and ce model", {
                      cluster  = "id",
                      data     = bladder1_stacked)
 
-    summary(test$model)
+    print(coef(test$model), digits = 3)
 
   })
 })
@@ -33,7 +33,7 @@ test_that("Test model with different varaibles for re and ce model", {
                      cluster  = "id",
                      data     = bladder1_stacked)
 
-    summary(test$model)
+    print(coef(test$model), digits = 3)
 
   })
 })
@@ -53,7 +53,7 @@ test_that("Test model with different dfs for ce and re model", {
                      cluster  = "id",
                      data     = bladder1_stacked)
 
-    summary(test$model)
+    print(coef(test$model), digits = 3)
 
   })
 })
@@ -74,7 +74,7 @@ test_that("Test model with re_tvc_terms", {
                      cluster  = "id",
                      data     = bladder1_stacked)
 
-    summary(test$model)
+    print(coef(test$model), digits = 3)
 
   })
 })
@@ -96,7 +96,7 @@ test_that("Test model with re_tvc_term and ce_tvc_term", {
                      cluster  = "id",
                      data     = bladder1_stacked)
 
-    summary(test$model)
+    print(coef(test$model), digits = 3)
 
   })
 })
