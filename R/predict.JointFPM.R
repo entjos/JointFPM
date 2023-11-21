@@ -94,7 +94,7 @@ predict.JointFPM <- function(object,
                              type = "mean_no",
                              newdata,
                              t,
-                             exposed,
+                             exposed = NULL,
                              ci_fit = TRUE,
                              ...){
 
@@ -102,6 +102,49 @@ predict.JointFPM <- function(object,
   tmp_newdata <- list()
 
   .SD <- .N <- ..pop_weights <- N <- NULL
+
+  # Check user input -----------------------------------------------------------
+
+  type <- match.arg(type, c("mean_no", "diff", "marg_mean_no", "marg_diff"))
+
+  if(!inherits(newdata, "data.frame")){
+    cli::cli_abort(
+      c("x" = "{.code newdata} is not a {.code data.frame}.",
+        "i" = "Please specify a {.code data.frame} as argument to {.code newdata}")
+    )
+  }
+
+  if(nrow(newdata) > 1){
+    cli::cli_abort(
+      c("x" = "{.code newdata} has more than one row.",
+        "i" = paste("Predictions are so far only supported for one covariate",
+                    "pattern at the time. Hence, {.code newdata} is only",
+                    "allowed to have one row. Please use multipe",
+                    "{.code predict} calls if you want to have",
+                    "Predictions for different covariate patterns.")
+      )
+    )
+  }
+
+  if(type %in% c("diff", "marg_diff")){
+
+    if(is.null(exposed)){
+      cli::cli_abort(
+        c("x" = paste("You selecting prediction one of {.code diff}, or",
+                      "{.code marg_diff} without specifing an exposed group",
+                      "using the {.code exposed} argument."),
+          "i" = paste("Please speficy a function defining your exposure",
+                      "group in {.code exposed}"))
+      )
+    }
+
+    if(!is.function(exposed)){
+      cli::cli_abort(
+        c("x" = "{.code exposed} is not a function.",
+          "i" = "Please specify a function that defines your exposed group.")
+      )
+    }
+  }
 
   # Prepare data for prediction ------------------------------------------------
 

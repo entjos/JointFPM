@@ -4,7 +4,15 @@
 \alias{predict.JointFPM}
 \title{Post-estimation function for JointFPMs}
 \usage{
-\method{predict}{JointFPM}(object, type = "mean_no", newdata, t, exposed, ci_fit = TRUE, ...)
+\method{predict}{JointFPM}(
+  object,
+  type = "mean_no",
+  newdata,
+  t,
+  exposed = NULL,
+  ci_fit = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{A joint flexible parametric model of class \code{JointFPM}.}

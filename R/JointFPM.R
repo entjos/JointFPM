@@ -127,7 +127,58 @@ JointFPM <- function(surv,
                      tvc_ce_terms = NULL,
                      cluster,
                      data){
-  # Prepare data
+
+  # Check user inputs ----------------------------------------------------------
+
+  if(!grepl("counting", as.character(surv)[[2]])){
+    cli::cli_abort(
+      c("x" = "{.code surv} is not of type {.code counting}.",
+        "i" = paste("Please check that you specified type == 'counting'",
+                    "in your {.code Surv} object."))
+    )
+  }
+
+  if(any(!inherits(re_model, "formula"), !inherits(re_model, "formula"))){
+    cli::cli_abort(
+      c("x" = "{.code re_model} or {.code ce_model} is not a formula.",
+        "i" = "Please specify a formula for both models.")
+    )
+  }
+
+  if(!all(c(re_indicator, ce_indicator) %in% colnames(data))){
+    cli::cli_abort(
+      c("x" = paste("One or both of {.code re_indicator}, and",
+                    "{.code ce_indicator} is/are not included in",
+                    "{.code data}."))
+    )
+  }
+
+  if(!(cluster %in% colnames(data))){
+    cli::cli_abort(
+      c("x" = paste("{.code cluster} is not included in {.code data}."))
+    )
+  }
+
+  if(
+    {
+      n_min <- 2 * data.table::uniqueN(data[[cluster]])
+      n_obs <- data.table::uniqueN(data,
+                                   by = c(cluster, re_indicator, ce_indicator))
+      n_min > n_obs
+    }
+  )
+  {
+    cli::cli_abort(
+      c("x" = paste("{.code data} has at least one observation with less than",
+                    "2 rows."),
+        "i" = paste("Every observation should have at least 2 rows in the",
+                    "stacked dataset: at least one row for the recurrent event,",
+                    "and one row for the competing event. Please check your",
+                    "dataset."))
+    )
+  }
+
+  # Prepare data ---------------------------------------------------------------
   time_var <- all.vars(surv)[[2]]
 
   ce_model_string <- paste0(labels(stats::terms(ce_model)), ":", ce_indicator,
@@ -136,7 +187,7 @@ JointFPM <- function(surv,
   re_model_string <- paste0(labels(stats::terms(re_model)), ":", re_indicator,
                             collapse = " + ")
 
-  # Prepare tvc argument
+  # Prepare tvc argument -------------------------------------------------------
   if(!is.null(tvc_re_terms)){
 
     tvc_re_terms <- paste0(names(tvc_re_terms), ":",
@@ -222,7 +273,7 @@ JointFPM <- function(surv,
               ce_indicator = ce_indicator,
               cluster      = cluster)
 
-  # Define class of output object
+  # Define class of output object ----------------------------------------------
   class(out) <- "JointFPM"
 
   return(out)

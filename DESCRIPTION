@@ -33,7 +33,8 @@ Imports:
     data.table (>= 1.14.2),
     rlang (>= 1.1.0),
     lifecycle,
-    rmutil
+    rmutil,
+    cli
 Depends:
   R (>= 4.0)
 Suggests: 
