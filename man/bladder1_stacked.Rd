@@ -5,7 +5,7 @@
 \alias{bladder1_stacked}
 \title{Stacked version of the bladder1 dataset included in the survival package}
 \format{
-A data frame with 412 rows and 10 columns
+A data frame with 412 rows and 11 columns
 }
 \usage{
 bladder1_stacked
