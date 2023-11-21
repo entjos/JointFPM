@@ -92,19 +92,19 @@ predict.JointFPM <- function(object,
                              ci_fit = TRUE,
                              ...){
 
+  # Prepare data for prediction
+  tmp_newdata <- list()
+
+  tmp_newdata$st_dta <- cbind(newdata, 1, 0)
+  colnames(tmp_newdata$st_dta) <- c(names(newdata),
+                                    object$ce_indicator,
+                                    object$re_indicator)
+
+  tmp_newdata$lambda_dta <- cbind(newdata, 0, 1)
+  colnames(tmp_newdata$lambda_dta) <- c(names(newdata),
+                                        object$ce_indicator,
+                                        object$re_indicator)
   if(type == "mean_no"){
-
-    tmp_newdata <- list()
-
-    tmp_newdata$st_dta <- cbind(newdata, 1, 0)
-    colnames(tmp_newdata$st_dta) <- c(names(newdata),
-                                      object$ce_indicator,
-                                      object$re_indicator)
-
-    tmp_newdata$lambda_dta <- cbind(newdata, 0, 1)
-    colnames(tmp_newdata$lambda_dta) <- c(names(newdata),
-                                          object$ce_indicator,
-                                          object$re_indicator)
 
     # Use Delta Method to obtain confidence intervals for E[N]
     if(ci_fit){
@@ -131,19 +131,8 @@ predict.JointFPM <- function(object,
 
   if(type == "diff"){
 
-    tmp_newdata_e0 <- list()
-
-    tmp_newdata_e0$st_dta <- cbind(newdata, 1, 0)
-    colnames(tmp_newdata_e0$st_dta) <- c(names(newdata),
-                                         object$ce_indicator,
-                                         object$re_indicator)
-
-    tmp_newdata_e0$lambda_dta <- cbind(newdata, 0, 1)
-    colnames(tmp_newdata_e0$lambda_dta) <- c(names(newdata),
-                                             object$ce_indicator,
-                                             object$re_indicator)
-
-    tmp_newdata_e1 <- tmp_newdata_e0
+    # Create new data for exposed group
+    tmp_newdata_e1 <- tmp_newdata
     tmp_newdata_e1$st_dta     <- do.call(exposed, list(tmp_newdata_e1$st_dta))
     tmp_newdata_e1$lambda_dta <- do.call(exposed, list(tmp_newdata_e1$lambda_dta))
 
@@ -154,8 +143,8 @@ predict.JointFPM <- function(object,
                                fun = function(obj, ...){
 
                                  e0 <- calc_N(obj, t,
-                                              lambda_dta = tmp_newdata_e0$lambda_dta,
-                                              st_dta     = tmp_newdata_e0$st_dta)
+                                              lambda_dta = tmp_newdata$lambda_dta,
+                                              st_dta     = tmp_newdata$st_dta)
 
                                  e1 <- calc_N(obj, t,
                                               lambda_dta = tmp_newdata_e1$lambda_dta,
@@ -170,8 +159,8 @@ predict.JointFPM <- function(object,
     } else {
 
       e0 <- calc_N(object$model, t,
-                   lambda_dta = tmp_newdata_e0$lambda_dta,
-                   st_dta     = tmp_newdata_e0$st_dta)
+                   lambda_dta = tmp_newdata$lambda_dta,
+                   st_dta     = tmp_newdata$st_dta)
 
       e1 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e1$lambda_dta,
