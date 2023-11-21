@@ -13,5 +13,5 @@
 #' @usage
 #' bladder1_stacked
 #' data(bladder1_stacked)
-#' @format A data frame with 412 rows and 10 columns
+#' @format A data frame with 412 rows and 11 columns
 NULL
