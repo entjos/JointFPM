@@ -16,14 +16,16 @@
 #'       \item{`diff`: }{Estimates the difference in mean number of events
 #'       between exposed and unexposed at time(s) `t`.}
 #'       \item{`marg_mean_no`: }{Estimates the marginal mean number of events.}
+#'       \item{`marg_diff`: }{Estimates the marginal difference in the mean
+#'       number of events.}
 #'    }
 #'
 #' @param newdata
 #'    A `data.frame` with one row including the variable values used for t
 #'    he prediction. One value for each variable used in either the recurrent or
 #'    competing event model is required when predicting `mean_no` or `diff`.
-#'    For `marg_mean_no`, this includes the variable that you would like your
-#'    marginal estimate to be conditioned on.
+#'    For `marg_mean_no` or `marg_diff`, this includes the variable
+#'    that you would like your marginal estimate to be conditioned on.
 #'
 #' @param t
 #'    A vector defining the time points used for the prediction.
@@ -95,10 +97,10 @@ predict.JointFPM <- function(object,
                              ci_fit = TRUE,
                              ...){
 
-  # Prepare data for prediction
-  tmp_newdata <- list()
+  # Prepare data for prediction ------------------------------------------------
 
-  if(type == "marg_mean_no"){
+  # Additional set up for marginal predictions =================================
+  if(type %in% c("marg_mean_no", "marg_diff")){
 
     vars <- unique(c(all.vars(object$re_model),
                      all.vars(object$ce_model),
@@ -121,15 +123,31 @@ predict.JointFPM <- function(object,
 
   }
 
+  # Prepare data for RE model ==================================================
+  tmp_newdata <- list()
+
   tmp_newdata$st_dta <- cbind(newdata, 1, 0)
   colnames(tmp_newdata$st_dta) <- c(names(newdata),
                                     object$ce_indicator,
                                     object$re_indicator)
 
+  # Prepare data for competing risk model ======================================
   tmp_newdata$lambda_dta <- cbind(newdata, 0, 1)
   colnames(tmp_newdata$lambda_dta) <- c(names(newdata),
                                         object$ce_indicator,
                                         object$re_indicator)
+
+  # Additional set up for predictions of contrasts =============================
+  if(type %in% c("diff", "marg_diff")){
+
+    # Create new data for exposed group
+    tmp_newdata_e1 <- tmp_newdata
+    tmp_newdata_e1$st_dta     <- do.call(exposed, list(tmp_newdata_e1$st_dta))
+    tmp_newdata_e1$lambda_dta <- do.call(exposed, list(tmp_newdata_e1$lambda_dta))
+
+  }
+
+  # Prediction of conditional mean number of evetns ----------------------------
   if(type == "mean_no"){
 
     # Use Delta Method to obtain confidence intervals for E[N]
@@ -155,32 +173,30 @@ predict.JointFPM <- function(object,
 
   }
 
+  # Prediction of conditional difference of mean number of events --------------
   if(type == "diff"){
-
-    # Create new data for exposed group
-    tmp_newdata_e1 <- tmp_newdata
-    tmp_newdata_e1$st_dta     <- do.call(exposed, list(tmp_newdata_e1$st_dta))
-    tmp_newdata_e1$lambda_dta <- do.call(exposed, list(tmp_newdata_e1$lambda_dta))
 
     # Use Delta Method to obtain confidence intervals for E[N]
     if(ci_fit){
 
-      est <- rstpm2::predictnl(object$model,
-                               fun = function(obj, ...){
+      est <- rstpm2::predictnl(
+        object$model,
+        fun = function(obj, ...){
 
-                                 e0 <- calc_N(obj, t,
-                                              lambda_dta = tmp_newdata$lambda_dta,
-                                              st_dta     = tmp_newdata$st_dta)
+          e0 <- calc_N(obj, t,
+                       lambda_dta = tmp_newdata$lambda_dta,
+                       st_dta     = tmp_newdata$st_dta)
 
-                                 e1 <- calc_N(obj, t,
-                                              lambda_dta = tmp_newdata_e1$lambda_dta,
-                                              st_dta     = tmp_newdata_e1$st_dta)
+          e1 <- calc_N(obj, t,
+                       lambda_dta = tmp_newdata_e1$lambda_dta,
+                       st_dta     = tmp_newdata_e1$st_dta)
 
-                                 out <- e0-e1
+          out <- e0-e1
 
-                                 return(out)
+          return(out)
 
-                               })
+        }
+      )
 
     } else {
 
@@ -197,6 +213,7 @@ predict.JointFPM <- function(object,
 
   }
 
+  # Prediction of marginal mean number of events -------------------------------
   if(type == "marg_mean_no"){
 
     # Use Delta Method to obtain confidence intervals for E[N]
@@ -209,11 +226,10 @@ predict.JointFPM <- function(object,
           temp_estimates <- lapply(
             seq_len(nrow(newdata)),
             function(i){
-              N <- calc_N(
-                obj, t,
-                lambda_dta = tmp_newdata$lambda_dta[i,],
-                st_dta     = tmp_newdata$st_dta[i, ]
-              )
+              N <- calc_N( obj, t,
+                           lambda_dta = tmp_newdata$lambda_dta[i,],
+                           st_dta     = tmp_newdata$st_dta[i, ])
+
               data.frame(t, N)
             }
           ) |> data.table::rbindlist()
@@ -230,11 +246,9 @@ predict.JointFPM <- function(object,
       temp_estimates <- lapply(
         seq_len(nrow(newdata)),
         function(i){
-          N <- calc_N(
-            object$model, t,
-            lambda_dta = tmp_newdata$lambda_dta[i,],
-            st_dta     = tmp_newdata$st_dta[i, ]
-          )
+          N <- calc_N(object$model, t,
+                      lambda_dta = tmp_newdata$lambda_dta[i,],
+                      st_dta     = tmp_newdata$st_dta[i, ])
 
           data.frame(t, N)
         }
@@ -248,6 +262,65 @@ predict.JointFPM <- function(object,
 
   }
 
+  # Prediction of marginal difference in mean number of events -----------------
+  if(type == "marg_diff"){
+
+    # Use Delta Method to obtain confidence intervals for E[N]
+    if(ci_fit){
+
+      est <- rstpm2::predictnl(
+        object$model,
+        fun = function(obj, ...){
+
+          temp_estimates <- lapply(
+            seq_len(nrow(newdata)),
+            function(i){
+
+              e0 <- calc_N(obj, t,
+                           lambda_dta = tmp_newdata$lambda_dta[i,],
+                           st_dta     = tmp_newdata$st_dta[i,])
+
+              e1 <- calc_N(obj, t,
+                           lambda_dta = tmp_newdata_e1$lambda_dta[i,],
+                           st_dta     = tmp_newdata_e1$st_dta[i,])
+
+              data.frame(t, diff = e0-e1)
+
+            }) |> data.table::rbindlist()
+
+          temp_estimates[,
+                         list(est = stats::weighted.mean(diff, ..pop_weights)),
+                         by = t][["est"]]
+
+        })
+
+    } else {
+
+      temp_estimates <- lapply(
+        seq_len(nrow(newdata)),
+        function(i){
+
+          e0 <- calc_N(object$model, t,
+                       lambda_dta = tmp_newdata$lambda_dta[i,],
+                       st_dta     = tmp_newdata$st_dta[i,])
+
+          e1 <- calc_N(object$model, t,
+                       lambda_dta = tmp_newdata_e1$lambda_dta[i,],
+                       st_dta     = tmp_newdata_e1$st_dta[i,])
+
+          data.frame(t, diff = e0-e1)
+
+        }) |> data.table::rbindlist()
+
+      est <- temp_estimates[,
+                            list(est = stats::weighted.mean(diff, ..pop_weights)),
+                            by = t][["est"]]
+
+    }
+
+  }
+
+  # Prepare output -------------------------------------------------------------
   if(ci_fit){
 
     cis <- rstpm2::confint.predictnl(est)
