@@ -84,6 +84,7 @@
 #'         ci_fit  = FALSE)
 #'
 #' @import rstpm2
+#' @importFrom data.table `:=`
 #'
 #' @method predict JointFPM
 #'
@@ -96,6 +97,11 @@ predict.JointFPM <- function(object,
                              exposed,
                              ci_fit = TRUE,
                              ...){
+
+  # Initialize objects ---------------------------------------------------------
+  tmp_newdata <- list()
+
+  .SD <- .N <- ..pop_weights <- N <- NULL
 
   # Prepare data for prediction ------------------------------------------------
 
@@ -110,7 +116,9 @@ predict.JointFPM <- function(object,
 
 
     for(i in seq_along(colnames(newdata))){
-      set(target_pop, j = colnames(newdata)[[i]], value = newdata[1,i])
+      data.table::set(target_pop,
+                      j = colnames(newdata)[[i]],
+                      value = newdata[1,i])
     }
 
     newdata <- unique(target_pop, by = object$cluster)
@@ -124,7 +132,6 @@ predict.JointFPM <- function(object,
   }
 
   # Prepare data for RE model ==================================================
-  tmp_newdata <- list()
 
   tmp_newdata$st_dta <- cbind(newdata, 1, 0)
   colnames(tmp_newdata$st_dta) <- c(names(newdata),
