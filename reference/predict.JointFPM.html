@@ -76,14 +76,19 @@ options are:</p><dl><dt><code>mean_no</code>: </dt>
 <dd><p>Estimates the difference in mean number of events
 between exposed and unexposed at time(s) <code>t</code>.</p></dd>
 
+<dt><code>marg_mean_no</code>: </dt>
+<dd><p>Estimates the marginal mean number of events.</p></dd>
+
 
 </dl></dd>
 
 
 <dt>newdata</dt>
-<dd><p>A <code>data.frame</code> including the variable values used for the prediction. One
-value for each variable used in either the recurrent or competing event
-model is required.</p></dd>
+<dd><p>A <code>data.frame</code> with one row including the variable values used for t
+he prediction. One value for each variable used in either the recurrent or
+competing event model is required when predicting <code>mean_no</code> or <code>diff</code>.
+For <code>marg_mean_no</code>, this includes the variable that you would like your
+marginal estimate to be conditioned on.</p></dd>
 
 
 <dt>t</dt>
