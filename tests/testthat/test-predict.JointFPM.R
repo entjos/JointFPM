@@ -337,3 +337,26 @@ test_that("Error when exposed is not a function",{
             ci_fit  = FALSE)
   }, regexp = "`exposed` is not a function.")
 })
+
+test_that("Error when var is not included in newdata",{
+  expect_error({
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa + size,
+                           ce_model = ~ pyridoxine + thiotepa + size,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1),
+            t       =  c(10),
+            type = "mean_no",
+            ci_fit  = FALSE)
+  }, regexp = "thiotepa and size are not included in `newdata`")
+})
