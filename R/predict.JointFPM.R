@@ -157,13 +157,11 @@ predict.JointFPM <- function(object,
         c("x" = "{temp_vars} {?is/are} not included in {.code newdata}.",
           "i" = "Please add {temp_vars} to newdata.")
       )
-
       rm(temp_vars)
-
-      }
+    }
   }
 
-    # Prepare data for prediction ------------------------------------------------
+  # Prepare data for prediction ------------------------------------------------
 
   # Additional set up for marginal predictions =================================
   if(type %in% c("marg_mean_no", "marg_diff")){
