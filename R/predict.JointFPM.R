@@ -146,7 +146,24 @@ predict.JointFPM <- function(object,
     }
   }
 
-  # Prepare data for prediction ------------------------------------------------
+  if(type %in% c("mean_no", "diff")){
+    temp_vars <- unique(c(all.vars(object$re_model),
+                          all.vars(object$ce_model)))
+
+    temp_vars <- temp_vars[!(temp_vars %in% colnames(newdata))]
+
+    if(!identical(temp_vars, character(0))){
+      cli::cli_abort(
+        c("x" = "{temp_vars} {?is/are} not included in {.code newdata}.",
+          "i" = "Please add {temp_vars} to newdata.")
+      )
+
+      rm(temp_vars)
+
+      }
+  }
+
+    # Prepare data for prediction ------------------------------------------------
 
   # Additional set up for marginal predictions =================================
   if(type %in% c("marg_mean_no", "marg_diff")){
