@@ -3,6 +3,7 @@
 - Added standardization for estimating marginal estimates of the mean number of events and differences thereof
 - Added checks of user inputs to `JointFPM()`
 - Added checks of user inputs to `predict.JointFPM()`
+- Improved error messages
 
 # JointFPM 1.0.1
 
