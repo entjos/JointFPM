@@ -11,3 +11,4 @@ README.qmd
 ^pkgdown$
 ^data-raw$
 ^codecov\.yml$
+^revdep$
