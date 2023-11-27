@@ -74,6 +74,111 @@ test_that("Difference is correct",{
   })
 })
 
+test_that("Parallel: Check calc CIs for mean number",{
+  skip_on_cran()
+  expect_snapshot({
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(50),
+            ci_fit  = TRUE) |>
+      print(digits = 4)
+  })
+})
+
+test_that("Parallel: Check calc CIs for diff in mean number",{
+  skip_on_cran()
+  expect_snapshot({
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            type = "diff",
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            exposed = \(x) transform(x, thiotepa = 1),
+            t       =  c(50),
+            ci_fit  = TRUE) |>
+      print(digits = 4)
+  })
+})
+
+test_that("Parallel: Check calc CIs for marg mean number",{
+  skip_on_cran()
+  expect_snapshot({
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa + size,
+                           ce_model = ~ pyridoxine + thiotepa + size,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(10),
+            type = "marg_mean_no",
+            ci_fit  = TRUE) |>
+      print(digits = 4)
+  })
+})
+
+test_that("Parallel: Check calc CIs for diff in marg mean number",{
+  skip_on_cran()
+  expect_snapshot({
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa + size,
+                           ce_model = ~ pyridoxine + thiotepa + size,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            type = "marg_diff",
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            exposed = \(x) transform(x, thiotepa = 1),
+            t       =  c(50),
+            ci_fit  = TRUE) |>
+      print(digits = 4)
+  })
+})
+
 test_that("S_M(t|x) == S(t|x)", {
   expect_equal({
 
