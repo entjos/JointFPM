@@ -4,6 +4,7 @@
 - Added checks of user inputs to `JointFPM()`
 - Added checks of user inputs to `predict.JointFPM()`
 - Improved error messages
+- Improved testing coverage
 
 # JointFPM 1.0.1
 
