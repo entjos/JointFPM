@@ -12,7 +12,7 @@ Authors@R: c(person(given = "Joshua P.",
              person(given  = "Mark",
                     family = "Clements",
                     role   = "ctb"))
-Version: 1.0.1.9000
+Version: 1.1.0
 Date: 2023-09-19
 Description: Implementation of a parametric joint model for modelling recurrent
   and competing event processes using generalised survival models. The joint
