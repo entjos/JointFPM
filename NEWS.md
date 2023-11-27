@@ -1,4 +1,4 @@
-# JointFPM 1.0.1.9000 (development version)
+# JointFPM 1.1.0
 
 - Added standardization for estimating marginal estimates of the mean number of events and differences thereof
 - Added checks of user inputs to `JointFPM()`
