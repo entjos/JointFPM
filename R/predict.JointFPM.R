@@ -174,6 +174,8 @@ predict.JointFPM <- function(object,
     }
   }
 
+  method <- match.arg(method, choices = c("romberg", "gq"))
+
   # Prepare data for prediction ------------------------------------------------
 
   # Additional set up for marginal predictions =================================
@@ -225,6 +227,14 @@ predict.JointFPM <- function(object,
 
   }
 
+  # Additional setup for numerical integration, if method = "gq"
+  if (method == "gq") {
+    # Doing this here as it only needs to be done once
+    gq <- statmod::gauss.quad(n = ngq)
+  } else {
+    gq <- NULL
+  }
+
   # Prediction of conditional mean number of evetns ----------------------------
   if(type == "mean_no"){
 
@@ -238,7 +248,7 @@ predict.JointFPM <- function(object,
                                         lambda_dta = tmp_newdata$lambda_dta,
                                         st_dta     = tmp_newdata$st_dta,
                                         method     = method,
-                                        ngq        = ngq)
+                                        gq         = gq)
 
                                })
 
@@ -248,7 +258,7 @@ predict.JointFPM <- function(object,
                     lambda_dta = tmp_newdata$lambda_dta,
                     st_dta     = tmp_newdata$st_dta,
                     method     = method,
-                    ngq        = ngq)
+                    gq         = gq)
 
       }
 
@@ -269,13 +279,13 @@ predict.JointFPM <- function(object,
                        lambda_dta = tmp_newdata$lambda_dta,
                        st_dta     = tmp_newdata$st_dta,
                        method     = method,
-                       ngq        = ngq)
+                       gq         = gq)
 
           e1 <- calc_N(obj, t,
                        lambda_dta = tmp_newdata_e1$lambda_dta,
                        st_dta     = tmp_newdata_e1$st_dta,
                        method     = method,
-                       ngq        = ngq)
+                       gq         = gq)
 
           out <- e0-e1
 
@@ -290,13 +300,13 @@ predict.JointFPM <- function(object,
                    lambda_dta = tmp_newdata$lambda_dta,
                    st_dta     = tmp_newdata$st_dta,
                    method     = method,
-                   ngq        = ngq)
+                   gq         = gq)
 
       e1 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e1$lambda_dta,
                    st_dta     = tmp_newdata_e1$st_dta,
                    method     = method,
-                   ngq        = ngq)
+                   gq         = gq)
 
       est <- e0-e1
     }
@@ -320,7 +330,7 @@ predict.JointFPM <- function(object,
                            lambda_dta = tmp_newdata$lambda_dta[i,],
                            st_dta     = tmp_newdata$st_dta[i, ],
                            method     = method,
-                           ngq        = ngq)
+                           gq         = gq)
 
               data.frame(t, N)
             }
@@ -342,7 +352,7 @@ predict.JointFPM <- function(object,
                       lambda_dta = tmp_newdata$lambda_dta[i,],
                       st_dta     = tmp_newdata$st_dta[i, ],
                       method     = method,
-                      ngq        = ngq)
+                      gq         = gq)
 
           data.frame(t, N)
         }
@@ -374,13 +384,13 @@ predict.JointFPM <- function(object,
                            lambda_dta = tmp_newdata$lambda_dta[i,],
                            st_dta     = tmp_newdata$st_dta[i,],
                            method     = method,
-                           ngq        = ngq)
+                           gq         = gq)
 
               e1 <- calc_N(obj, t,
                            lambda_dta = tmp_newdata_e1$lambda_dta[i,],
                            st_dta     = tmp_newdata_e1$st_dta[i,],
                            method     = method,
-                           ngq        = ngq)
+                           gq         = gq)
 
               data.frame(t, diff = e0-e1)
 
@@ -402,13 +412,13 @@ predict.JointFPM <- function(object,
                        lambda_dta = tmp_newdata$lambda_dta[i,],
                        st_dta     = tmp_newdata$st_dta[i,],
                        method     = method,
-                       ngq        = ngq)
+                       gq         = gq)
 
           e1 <- calc_N(object$model, t,
                        lambda_dta = tmp_newdata_e1$lambda_dta[i,],
                        st_dta     = tmp_newdata_e1$st_dta[i,],
                        method     = method,
-                       ngq        = ngq)
+                       gq         = gq)
 
           data.frame(t, diff = e0-e1)
 

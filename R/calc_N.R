@@ -24,9 +24,7 @@
 #' @return
 #'    A numeric vector of integral with the same length as t.
 
-calc_N <- function(obj, t, lambda_dta, st_dta, method, ngq = 30) {
-
-    method <- match.arg(method, choices = c("romberg", "gq"))
+calc_N <- function(obj, t, lambda_dta, st_dta, method, gq = NULL) {
 
     t <- pmax(t, .Machine$double.xmin)
 
@@ -37,7 +35,6 @@ calc_N <- function(obj, t, lambda_dta, st_dta, method, ngq = 30) {
         b = t
       )
     } else if (method == "gq") {
-      gq <- statmod::gauss.quad(n = ngq)
       wmat <- matrix(data = gq$weights, ncol = length(t), nrow = length(gq$weights), byrow = FALSE)
       xmat <- matrix(data = gq$nodes, ncol = length(t), nrow = length(gq$nodes), byrow = FALSE)
       scalerv <- t / 2

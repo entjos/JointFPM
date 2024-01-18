@@ -223,14 +223,14 @@ summary(perf)
     # A tibble: 8 × 6
       expression        min   median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>   <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 01: Romberg     12.9s    13.2s    0.0749  185.57MB     2.58
-    2 02: GQ (2)    156.1ms  160.8ms    6.11      4.27MB     2.44
-    3 03: GQ (3)    160.8ms  169.1ms    5.90      6.81MB     2.36
-    4 05: GQ (5)    171.4ms  178.6ms    5.54     10.76MB     2.40
-    5 06: GQ (10)     176ms  184.9ms    5.27     23.23MB     2.28
-    6 08: GQ (20)   180.3ms  187.4ms    5.28     44.66MB     2.29
-    7 10: GQ (30)   182.8ms  189.8ms    4.84     65.89MB     2.10
-    8 11: GQ (100)  248.6ms  258.2ms    3.84    213.99MB     3.58
+    1 01: Romberg     12.7s    13.2s    0.0754  185.57MB     2.77
+    2 02: GQ (2)    155.9ms  157.5ms    5.79      4.27MB     2.51
+    3 03: GQ (3)    156.6ms    159ms    6.23      6.81MB     2.91
+    4 05: GQ (5)    166.4ms  168.8ms    5.85     10.76MB     2.73
+    5 06: GQ (10)   170.9ms  177.6ms    5.53     23.23MB     2.58
+    6 08: GQ (20)     178ms  185.3ms    5.39     44.59MB     2.70
+    7 10: GQ (30)   183.2ms  188.9ms    5.19      65.8MB     2.42
+    8 11: GQ (100)  231.8ms  248.6ms    4.01    213.66MB     3.74
 
 …or, on a relative scale (vs the fastest time):
 
@@ -244,14 +244,14 @@ summary(perf, relative = TRUE)
     # A tibble: 8 × 6
       expression     min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>   <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
-    1 01: Romberg  82.5   82.0        1       43.5      1.23
-    2 02: GQ (2)    1      1         81.5      1        1.16
-    3 03: GQ (3)    1.03   1.05      78.8      1.60     1.13
-    4 05: GQ (5)    1.10   1.11      74.0      2.52     1.14
-    5 06: GQ (10)   1.13   1.15      70.4      5.44     1.09
-    6 08: GQ (20)   1.15   1.17      70.6     10.5      1.09
-    7 10: GQ (30)   1.17   1.18      64.7     15.4      1   
-    8 11: GQ (100)  1.59   1.61      51.2     50.1      1.71
+    1 01: Romberg  81.5   83.6        1       43.5      1.14
+    2 02: GQ (2)    1      1         76.8      1        1.04
+    3 03: GQ (3)    1.00   1.01      82.6      1.60     1.20
+    4 05: GQ (5)    1.07   1.07      77.6      2.52     1.13
+    5 06: GQ (10)   1.10   1.13      73.4      5.44     1.07
+    6 08: GQ (20)   1.14   1.18      71.5     10.4      1.11
+    7 10: GQ (30)   1.17   1.20      68.9     15.4      1   
+    8 11: GQ (100)  1.49   1.58      53.2     50.1      1.54
 
 The predictions calculated using Gaussian quadrature are significantly
 faster than the predictions that use Romberg integration, but with
@@ -399,8 +399,8 @@ summary(perf_std, relative = TRUE)
     # A tibble: 2 × 6
       expression   min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr> <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
-    1 1: Romberg  63.8   63.3       1        4.36     1.36
-    2 2: GQ (30)   1      1        63.0      1        1   
+    1 1: Romberg  63.6   61.4       1        4.36     1.17
+    2 2: GQ (30)   1      1        61.8      1        1   
 
 ``` r
 autoplot(perf_std) +
