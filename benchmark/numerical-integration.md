@@ -121,14 +121,14 @@ p_r <- predict(bldr_model, newdata = nd, t = timep, method = "romberg") |>
   mutate(method = "romberg")
 ```
 
-Then, we use Gauss-Hermite quadrature with 2, 3, 5, 10, 20, 30, or 100
-quadrature points:
+Then, we use Gauss-Hermite quadrature with 2, 3, 5, 10, 20, 30, 100, or
+200 quadrature points:
 
 ``` r
 library(glue)
 
 p_gq <- map_dfr(
-  .x = c(2, 3, 5, 10, 20, 30, 100),
+  .x = c(2, 3, 5, 10, 20, 30, 100, 200),
   .f = function(x) {
     predict(bldr_model, newdata = nd, t = timep, method = "gq", ngq = x) |>
       mutate(method = glue("gq{x}"))
@@ -142,8 +142,8 @@ We combine these predictions and plot them:
 bind_rows(p_r, p_gq) |>
   mutate(method = factor(
     x = method,
-    levels = c("romberg", "gq2", "gq3", "gq5", "gq10", "gq20", "gq30", "gq100"),
-    labels = c("Romberg", "GQ (2)", "GQ (3)", "GQ (5)", "GQ (10)", "GQ (20)", "GQ (30)", "GQ (100)")
+    levels = c("romberg", "gq2", "gq3", "gq5", "gq10", "gq20", "gq30", "gq100", "gq200"),
+    labels = c("Romberg", "GQ (2)", "GQ (3)", "GQ (5)", "GQ (10)", "GQ (20)", "GQ (30)", "GQ (100)", "GQ (200)")
   )) |>
   ggplot(aes(x = stop, y = fit)) +
   geom_ribbon(aes(ymin = lci, ymax = uci, fill = method), alpha = 0.1) +
@@ -166,8 +166,8 @@ bind_rows(p_r, p_gq) |>
   mutate(diff = abs(value - romberg)) |>
   mutate(name = factor(
     x = name,
-    levels = c("gq2", "gq3", "gq5", "gq10", "gq20", "gq30", "gq100"),
-    labels = c("GQ (2)", "GQ (3)", "GQ (5)", "GQ (10)", "GQ (20)", "GQ (30)", "GQ (100)")
+    levels = c("gq2", "gq3", "gq5", "gq10", "gq20", "gq30", "gq100", "gq200"),
+    labels = c("GQ (2)", "GQ (3)", "GQ (5)", "GQ (10)", "GQ (20)", "GQ (30)", "GQ (100)", "GQ (200)")
   )) |>
   ggplot(aes(x = stop, y = diff, color = name)) +
   geom_line() +
@@ -181,7 +181,7 @@ alt="Figure 2: Predictions for the mean number of events (with 95% confidence i
 
 Once we use 20+ integration points, the predicted values are pretty
 close to each other. With 30+ integration points the two methods
-(Romberg vs Gaussian quadrature) are largely perfectly overlapping.
+(Romberg vs Gaussian quadrature) are even closer.
 
 # Benchmark
 
@@ -198,14 +198,15 @@ library(bench)
 timep2 <- seq(.Machine$double.eps, max(bldr_stacked$stop), length.out = 5)
 
 perf <- mark(
-  "01: Romberg" = predict(bldr_model, newdata = nd, t = timep2, method = "romberg"),
-  "02: GQ (2)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 2),
-  "03: GQ (3)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 3),
-  "05: GQ (5)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 5),
-  "06: GQ (10)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 10),
-  "08: GQ (20)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 20),
-  "10: GQ (30)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 30),
-  "11: GQ (100)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 100),
+  "1: Romberg" = predict(bldr_model, newdata = nd, t = timep2, method = "romberg"),
+  "2: GQ (2)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 2),
+  "3: GQ (3)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 3),
+  "4: GQ (5)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 5),
+  "5: GQ (10)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 10),
+  "6: GQ (20)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 20),
+  "7: GQ (30)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 30),
+  "8: GQ (100)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 100),
+  "9: GQ (200)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 200),
   check = FALSE, iterations = 30
 )
 ```
@@ -220,17 +221,18 @@ summary(perf)
     Warning: Some expressions had a GC in every iteration; so filtering is
     disabled.
 
-    # A tibble: 8 × 6
-      expression        min   median `itr/sec` mem_alloc `gc/sec`
-      <bch:expr>   <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 01: Romberg     12.7s    13.2s    0.0754  185.57MB     2.77
-    2 02: GQ (2)    155.9ms  157.5ms    5.79      4.27MB     2.51
-    3 03: GQ (3)    156.6ms    159ms    6.23      6.81MB     2.91
-    4 05: GQ (5)    166.4ms  168.8ms    5.85     10.76MB     2.73
-    5 06: GQ (10)   170.9ms  177.6ms    5.53     23.23MB     2.58
-    6 08: GQ (20)     178ms  185.3ms    5.39     44.59MB     2.70
-    7 10: GQ (30)   183.2ms  188.9ms    5.19      65.8MB     2.42
-    8 11: GQ (100)  231.8ms  248.6ms    4.01    213.66MB     3.74
+    # A tibble: 9 × 6
+      expression       min   median `itr/sec` mem_alloc `gc/sec`
+      <bch:expr>  <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
+    1 1: Romberg     12.8s    12.8s    0.0769  185.57MB     2.68
+    2 2: GQ (2)    156.5ms  158.1ms    6.27      4.27MB     2.51
+    3 3: GQ (3)    157.7ms  162.3ms    6.08      6.81MB     2.63
+    4 4: GQ (5)    167.2ms  172.4ms    5.78     10.76MB     2.70
+    5 5: GQ (10)   173.2ms    177ms    5.53     23.23MB     2.39
+    6 6: GQ (20)   179.3ms  192.2ms    4.95     44.59MB     2.31
+    7 7: GQ (30)   184.7ms  190.5ms    5.18      65.8MB     2.25
+    8 8: GQ (100)  230.2ms  248.1ms    4.09    213.66MB     2.59
+    9 9: GQ (200)  319.4ms  326.3ms    3.02    425.05MB     3.63
 
 …or, on a relative scale (vs the fastest time):
 
@@ -241,17 +243,18 @@ summary(perf, relative = TRUE)
     Warning: Some expressions had a GC in every iteration; so filtering is
     disabled.
 
-    # A tibble: 8 × 6
-      expression     min median `itr/sec` mem_alloc `gc/sec`
-      <bch:expr>   <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
-    1 01: Romberg  81.5   83.6        1       43.5      1.14
-    2 02: GQ (2)    1      1         76.8      1        1.04
-    3 03: GQ (3)    1.00   1.01      82.6      1.60     1.20
-    4 05: GQ (5)    1.07   1.07      77.6      2.52     1.13
-    5 06: GQ (10)   1.10   1.13      73.4      5.44     1.07
-    6 08: GQ (20)   1.14   1.18      71.5     10.4      1.11
-    7 10: GQ (30)   1.17   1.20      68.9     15.4      1   
-    8 11: GQ (100)  1.49   1.58      53.2     50.1      1.54
+    # A tibble: 9 × 6
+      expression    min median `itr/sec` mem_alloc `gc/sec`
+      <bch:expr>  <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
+    1 1: Romberg  81.5   81.3        1       43.5      1.19
+    2 2: GQ (2)    1      1         81.5      1        1.12
+    3 3: GQ (3)    1.01   1.03      79.0      1.60     1.17
+    4 4: GQ (5)    1.07   1.09      75.2      2.52     1.20
+    5 5: GQ (10)   1.11   1.12      71.9      5.44     1.07
+    6 6: GQ (20)   1.15   1.22      64.4     10.4      1.03
+    7 7: GQ (30)   1.18   1.20      67.4     15.4      1   
+    8 8: GQ (100)  1.47   1.57      53.2     50.1      1.15
+    9 9: GQ (200)  2.04   2.06      39.3     99.6      1.61
 
 The predictions calculated using Gaussian quadrature are significantly
 faster than the predictions that use Romberg integration, but with
@@ -399,8 +402,8 @@ summary(perf_std, relative = TRUE)
     # A tibble: 2 × 6
       expression   min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr> <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
-    1 1: Romberg  63.6   61.4       1        4.36     1.17
-    2 2: GQ (30)   1      1        61.8      1        1   
+    1 1: Romberg  65.8   65.3       1        4.36     1.35
+    2 2: GQ (30)   1      1        65.0      1        1   
 
 ``` r
 autoplot(perf_std) +

@@ -95,13 +95,13 @@ p_r <- predict(bldr_model, newdata = nd, t = timep, method = "romberg") |>
   mutate(method = "romberg")
 ```
 
-Then, we use Gauss-Hermite quadrature with 2, 3, 5, 10, 20, 30, or 100 quadrature points:
+Then, we use Gauss-Hermite quadrature with 2, 3, 5, 10, 20, 30, 100, or 200 quadrature points:
 
 ```{r}
 library(glue)
 
 p_gq <- map_dfr(
-  .x = c(2, 3, 5, 10, 20, 30, 100),
+  .x = c(2, 3, 5, 10, 20, 30, 100, 200),
   .f = function(x) {
     predict(bldr_model, newdata = nd, t = timep, method = "gq", ngq = x) |>
       mutate(method = glue("gq{x}"))
@@ -119,8 +119,8 @@ We combine these predictions and plot them:
 bind_rows(p_r, p_gq) |>
   mutate(method = factor(
     x = method,
-    levels = c("romberg", "gq2", "gq3", "gq5", "gq10", "gq20", "gq30", "gq100"),
-    labels = c("Romberg", "GQ (2)", "GQ (3)", "GQ (5)", "GQ (10)", "GQ (20)", "GQ (30)", "GQ (100)")
+    levels = c("romberg", "gq2", "gq3", "gq5", "gq10", "gq20", "gq30", "gq100", "gq200"),
+    labels = c("Romberg", "GQ (2)", "GQ (3)", "GQ (5)", "GQ (10)", "GQ (20)", "GQ (30)", "GQ (100)", "GQ (200)")
   )) |>
   ggplot(aes(x = stop, y = fit)) +
   geom_ribbon(aes(ymin = lci, ymax = uci, fill = method), alpha = 0.1) +
@@ -142,8 +142,8 @@ bind_rows(p_r, p_gq) |>
   mutate(diff = abs(value - romberg)) |>
   mutate(name = factor(
     x = name,
-    levels = c("gq2", "gq3", "gq5", "gq10", "gq20", "gq30", "gq100"),
-    labels = c("GQ (2)", "GQ (3)", "GQ (5)", "GQ (10)", "GQ (20)", "GQ (30)", "GQ (100)")
+    levels = c("gq2", "gq3", "gq5", "gq10", "gq20", "gq30", "gq100", "gq200"),
+    labels = c("GQ (2)", "GQ (3)", "GQ (5)", "GQ (10)", "GQ (20)", "GQ (30)", "GQ (100)", "GQ (200)")
   )) |>
   ggplot(aes(x = stop, y = diff, color = name)) +
   geom_line() +
@@ -152,7 +152,7 @@ bind_rows(p_r, p_gq) |>
 ```
 
 Once we use 20+ integration points, the predicted values are pretty close to each other.
-With 30+ integration points the two methods (Romberg vs Gaussian quadrature) are largely perfectly overlapping.
+With 30+ integration points the two methods (Romberg vs Gaussian quadrature) are even closer.
 
 # Benchmark {#sec-benchmark}
 
@@ -165,14 +165,15 @@ library(bench)
 timep2 <- seq(.Machine$double.eps, max(bldr_stacked$stop), length.out = 5)
 
 perf <- mark(
-  "01: Romberg" = predict(bldr_model, newdata = nd, t = timep2, method = "romberg"),
-  "02: GQ (2)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 2),
-  "03: GQ (3)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 3),
-  "05: GQ (5)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 5),
-  "06: GQ (10)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 10),
-  "08: GQ (20)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 20),
-  "10: GQ (30)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 30),
-  "11: GQ (100)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 100),
+  "1: Romberg" = predict(bldr_model, newdata = nd, t = timep2, method = "romberg"),
+  "2: GQ (2)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 2),
+  "3: GQ (3)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 3),
+  "4: GQ (5)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 5),
+  "5: GQ (10)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 10),
+  "6: GQ (20)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 20),
+  "7: GQ (30)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 30),
+  "8: GQ (100)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 100),
+  "9: GQ (200)" = predict(bldr_model, newdata = nd, t = timep2, method = "gq", ngq = 200),
   check = FALSE, iterations = 30
 )
 
