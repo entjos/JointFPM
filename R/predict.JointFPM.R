@@ -39,6 +39,17 @@
 #'    Logical indicator for whether confidence intervals should be estimated
 #'    for the fitted estimates using the delta method.
 #'
+#' @param method
+#'    The method used for the underlying numerical integration procedure.
+#'    Defaults to `"romberg"`, which uses the [rmutil::int()] function,
+#'    but it is possible to use Gaussian quadrature by setting
+#'    `method = "gq"` instead.
+#'
+#' @param ngq
+#'    Number of quadrature nodes used when `method = "gq"`. Defaults to 30,
+#'    which lead to accurate results (compared to `method = "romberg"`) in our
+#'    experience.
+#'
 #' @param ...
 #'    Added for compatibility with other predict functions.
 #'
@@ -96,6 +107,8 @@ predict.JointFPM <- function(object,
                              t,
                              exposed = NULL,
                              ci_fit = TRUE,
+                             method = "romberg",
+                             ngq = 30,
                              ...){
 
   # Initialize objects ---------------------------------------------------------
@@ -223,7 +236,9 @@ predict.JointFPM <- function(object,
 
                                  calc_N(obj, t,
                                         lambda_dta = tmp_newdata$lambda_dta,
-                                        st_dta     = tmp_newdata$st_dta)
+                                        st_dta     = tmp_newdata$st_dta,
+                                        method     = method,
+                                        ngq        = ngq)
 
                                })
 
@@ -231,9 +246,11 @@ predict.JointFPM <- function(object,
 
       est <- calc_N(object$model, t,
                     lambda_dta = tmp_newdata$lambda_dta,
-                    st_dta     = tmp_newdata$st_dta)
+                    st_dta     = tmp_newdata$st_dta,
+                    method     = method,
+                    ngq        = ngq)
 
-    }
+      }
 
 
   }
@@ -250,11 +267,15 @@ predict.JointFPM <- function(object,
 
           e0 <- calc_N(obj, t,
                        lambda_dta = tmp_newdata$lambda_dta,
-                       st_dta     = tmp_newdata$st_dta)
+                       st_dta     = tmp_newdata$st_dta,
+                       method     = method,
+                       ngq        = ngq)
 
           e1 <- calc_N(obj, t,
                        lambda_dta = tmp_newdata_e1$lambda_dta,
-                       st_dta     = tmp_newdata_e1$st_dta)
+                       st_dta     = tmp_newdata_e1$st_dta,
+                       method     = method,
+                       ngq        = ngq)
 
           out <- e0-e1
 
@@ -267,11 +288,15 @@ predict.JointFPM <- function(object,
 
       e0 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata$lambda_dta,
-                   st_dta     = tmp_newdata$st_dta)
+                   st_dta     = tmp_newdata$st_dta,
+                   method     = method,
+                   ngq        = ngq)
 
       e1 <- calc_N(object$model, t,
                    lambda_dta = tmp_newdata_e1$lambda_dta,
-                   st_dta     = tmp_newdata_e1$st_dta)
+                   st_dta     = tmp_newdata_e1$st_dta,
+                   method     = method,
+                   ngq        = ngq)
 
       est <- e0-e1
     }
@@ -293,7 +318,9 @@ predict.JointFPM <- function(object,
             function(i){
               N <- calc_N( obj, t,
                            lambda_dta = tmp_newdata$lambda_dta[i,],
-                           st_dta     = tmp_newdata$st_dta[i, ])
+                           st_dta     = tmp_newdata$st_dta[i, ],
+                           method     = method,
+                           ngq        = ngq)
 
               data.frame(t, N)
             }
@@ -313,7 +340,9 @@ predict.JointFPM <- function(object,
         function(i){
           N <- calc_N(object$model, t,
                       lambda_dta = tmp_newdata$lambda_dta[i,],
-                      st_dta     = tmp_newdata$st_dta[i, ])
+                      st_dta     = tmp_newdata$st_dta[i, ],
+                      method     = method,
+                      ngq        = ngq)
 
           data.frame(t, N)
         }
@@ -343,11 +372,15 @@ predict.JointFPM <- function(object,
 
               e0 <- calc_N(obj, t,
                            lambda_dta = tmp_newdata$lambda_dta[i,],
-                           st_dta     = tmp_newdata$st_dta[i,])
+                           st_dta     = tmp_newdata$st_dta[i,],
+                           method     = method,
+                           ngq        = ngq)
 
               e1 <- calc_N(obj, t,
                            lambda_dta = tmp_newdata_e1$lambda_dta[i,],
-                           st_dta     = tmp_newdata_e1$st_dta[i,])
+                           st_dta     = tmp_newdata_e1$st_dta[i,],
+                           method     = method,
+                           ngq        = ngq)
 
               data.frame(t, diff = e0-e1)
 
@@ -367,11 +400,15 @@ predict.JointFPM <- function(object,
 
           e0 <- calc_N(object$model, t,
                        lambda_dta = tmp_newdata$lambda_dta[i,],
-                       st_dta     = tmp_newdata$st_dta[i,])
+                       st_dta     = tmp_newdata$st_dta[i,],
+                       method     = method,
+                       ngq        = ngq)
 
           e1 <- calc_N(object$model, t,
                        lambda_dta = tmp_newdata_e1$lambda_dta[i,],
-                       st_dta     = tmp_newdata_e1$st_dta[i,])
+                       st_dta     = tmp_newdata_e1$st_dta[i,],
+                       method     = method,
+                       ngq        = ngq)
 
           data.frame(t, diff = e0-e1)
 

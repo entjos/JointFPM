@@ -34,7 +34,9 @@ Imports:
     rlang (>= 1.1.0),
     lifecycle,
     rmutil,
-    cli
+    cli,
+    matrixStats,
+    statmod
 Depends:
   R (>= 4.0)
 Suggests: 
