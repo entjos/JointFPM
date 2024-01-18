@@ -12,3 +12,4 @@ README.qmd
 ^data-raw$
 ^codecov\.yml$
 ^revdep$
+^benchmark$
