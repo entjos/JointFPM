@@ -24,9 +24,11 @@
 #' @return
 #'    A numeric vector of integral with the same length as t.
 
-calc_N <- function(obj, t, lambda_dta, st_dta) {
+calc_N <- function(obj, t, lambda_dta, st_dta, method, gq = NULL) {
 
-    if(0 %in% t) t[which(t == 0)] <- t[which(t == 0)] + .Machine$double.xmin
+  t <- pmax(t, .Machine$double.xmin)
+
+  if (method == "romberg") {
 
     N <- rmutil::int(
       f = function(x) predict_n(obj, t = x, lambda_dta, st_dta),
@@ -34,5 +36,50 @@ calc_N <- function(obj, t, lambda_dta, st_dta) {
       b = t
     )
 
+  } else if (method == "gq") {
+
+    # Define weight matrix
+    wmat <- matrix(data = gq$weights,
+                   ncol = length(t),
+                   nrow = length(gq$weights),
+                   byrow = FALSE)
+
+    # Define node matrix
+    xmat <- matrix(data = gq$nodes,
+                   ncol = length(t),
+                   nrow = length(gq$nodes),
+                   byrow = FALSE)
+
+    # Transform time to -1 to 1 scale
+    scalerv <- t / 2
+
+    scalerm <- matrix(data = scalerv, # Both (b - a) / 2 and (a + b) / 2
+                      ncol = length(t),
+                      nrow = nrow(xmat),
+                      byrow = TRUE)
+
+    xmat <- scalerm * xmat + scalerm
+
+    xmatv <- as.vector(xmat)
+
+    # Predict mean number of events at node points
+    fval <- predict_n(obj, t = xmatv, lambda_dta, st_dta)
+
+    fval <- matrix(data = fval,
+                   nrow = nrow(xmat),
+                   ncol = ncol(xmat),
+                   byrow = FALSE)
+
+    # Sum weighted mean number of events at node points
+    N <- scalerv * matrixStats::colSums2(x = wmat * fval)
+
+  } else {
+
+    stop("Integration method not supported.",
+         call. = FALSE)
+
+  }
+
   return(N)
+
 }
