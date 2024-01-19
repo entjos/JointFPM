@@ -491,3 +491,78 @@ test_that("Test integration when t == 0",{
 
   }, NA_real_)
 })
+
+test_that("Integration with GQ works", {
+  expect_snapshot({
+
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(1, 50, 100),
+            method  = "gq",
+            ngq     = 30,
+            ci_fit  = FALSE)
+  })
+})
+
+test_that("GQ gives results similar to Romberg Integration", {
+  expect_equal({
+
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(1, 50, 100),
+            method  = "gq",
+            ngq     = 200,
+            ci_fit  = FALSE)
+  }, {
+
+    bldr_model <- JointFPM(Surv(time  = start,
+                                time2 = stop,
+                                event = event,
+                                type  = 'counting') ~ 1,
+                           re_model = ~ pyridoxine + thiotepa,
+                           ce_model = ~ pyridoxine + thiotepa,
+                           re_indicator = "re",
+                           ce_indicator = "ce",
+                           df_ce = 3,
+                           df_re = 3,
+                           cluster  = "id",
+                           data     = bladder1_stacked)
+
+    predict(bldr_model,
+            newdata = data.frame(pyridoxine = 1,
+                                 thiotepa   = 0),
+            t       =  c(1, 50, 100),
+            ci_fit  = FALSE)
+
+  },
+  tolerance = 0.001)
+})
+
