@@ -93,7 +93,7 @@
 #'      event}
 #'      }
 #'
-#' @importFrom data.table `:=`
+#' @import data.table
 #' @import rstpm2
 #'
 #' @examples

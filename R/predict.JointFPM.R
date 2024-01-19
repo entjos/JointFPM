@@ -95,7 +95,7 @@
 #'         ci_fit  = FALSE)
 #'
 #' @import rstpm2
-#' @importFrom data.table `:=`
+#' @import data.table
 #'
 #' @method predict JointFPM
 #'

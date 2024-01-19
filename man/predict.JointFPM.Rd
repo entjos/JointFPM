@@ -11,6 +11,8 @@
   t,
   exposed = NULL,
   ci_fit = TRUE,
+  method = "romberg",
+  ngq = 30,
   ...
 )
 }
@@ -42,6 +44,15 @@ Please see details for more information.}
 
 \item{ci_fit}{Logical indicator for whether confidence intervals should be estimated
 for the fitted estimates using the delta method.}
+
+\item{method}{The method used for the underlying numerical integration procedure.
+Defaults to \code{"romberg"}, which uses the \code{\link[rmutil:int]{rmutil::int()}} function,
+but it is possible to use Gaussian quadrature by setting
+\code{method = "gq"} instead.}
+
+\item{ngq}{Number of quadrature nodes used when \code{method = "gq"}. Defaults to 30,
+which lead to accurate results (compared to \code{method = "romberg"}) in our
+experience.}
 
 \item{...}{Added for compatibility with other predict functions.}
 }
