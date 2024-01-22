@@ -1,3 +1,5 @@
+# JointFPM (development version)
+
 # JointFPM 1.2.0
 - `predict.JointFP()` allows now to chose Gaussian quadrature instead of Romberg's method for the integration of the production of the survival and intensity function for estimating the mean number of events (@ellessenne, #8). Using Gaussian quadrature is fast while providing results similar to Romberg's method, if a sufficient number if nodes is chosen. This might be particular useful when standardising over linear covariates.
 - Fixed a small error when upgrading to Roxygen 7.3.0 #10.
