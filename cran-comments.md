@@ -1,6 +1,6 @@
-# JointFPM 1.1.0
+# JointFPM 1.2.0
 
-This version includes major additions to the prediction function of the package as well as improved checks of user input and unit tests.
+This version includes major additions to `predict.JointFPM()` by adding Gaussian quadrature to the methods that can be chosen for integrating the cause-specific intensity function.
 
 ## R CMD check results
 0 errors | 0 warnings | 0 notes
