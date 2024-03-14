@@ -48,7 +48,7 @@
 <h2 class="pkg-version" data-toc-text="development version" id="jointfpm-development-version">JointFPM (development version)<a class="anchor" aria-label="anchor" href="#jointfpm-development-version"></a></h2>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2.0" id="jointfpm-120">JointFPM 1.2.0<a class="anchor" aria-label="anchor" href="#jointfpm-120"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.2.0" id="jointfpm-120">JointFPM 1.2.0<a class="anchor" aria-label="anchor" href="#jointfpm-120"></a></h2><p class="text-muted">CRAN release: 2024-01-22</p>
 <ul><li>
 <code>predict.JointFP()</code> allows now to chose Gaussian quadrature instead of Romberg’s method for the integration of the production of the survival and intensity function for estimating the mean number of events (<a href="https://github.com/ellessenne" class="external-link">@ellessenne</a>, <a href="https://github.com/entjos/JointFPM/issues/8" class="external-link">#8</a>). Using Gaussian quadrature is fast while providing results similar to Romberg’s method, if a sufficient number if nodes is chosen. This might be particular useful when standardising over linear covariates.</li>
 <li>Fixed a small error when upgrading to Roxygen 7.3.0 <a href="https://github.com/entjos/JointFPM/issues/10" class="external-link">#10</a>.</li>
