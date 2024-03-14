@@ -41,6 +41,6 @@ summary.JointFPM <- function(object, ...){
   cat("\n")
 
   # Print log likelihood
-  cat("-2 Log-likelihood:", -2*x$model@details$value)
+  cat("-2 Log-likelihood:", -2*object$model@details$value)
 
 }
