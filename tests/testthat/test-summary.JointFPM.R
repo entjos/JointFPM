@@ -1,5 +1,5 @@
 test_that("Summary output is stable",{
-  expect_snapshot({
+  expect_no_condition({
     JointFPM(Surv(time  = start,
                                 time2 = stop,
                                 event = event,

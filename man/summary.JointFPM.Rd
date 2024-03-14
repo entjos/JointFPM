@@ -7,9 +7,9 @@
 \method{summary}{JointFPM}(object, ...)
 }
 \arguments{
-\item{...}{Other arguments that should be passed to print.}
+\item{object}{An \code{JointFPM} object.}
 
-\item{x}{An \code{JointFPM} object.}
+\item{...}{Other arguments that should be passed to the function.}
 }
 \value{
 No return value, called for side effects.

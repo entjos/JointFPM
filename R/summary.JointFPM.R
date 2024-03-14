@@ -7,7 +7,7 @@
 #'    An `JointFPM` object.
 #'
 #' @param ...
-#'    Other arguments that should be passed to print.
+#'    Other arguments that should be passed to the function.
 #'
 #' @return
 #'    No return value, called for side effects.
