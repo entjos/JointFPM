@@ -83,6 +83,12 @@
 #'     4      0      6.07  1      0
 #'    ```
 #'
+#' @param control
+#'    List of arguments passed to [rstpm2::gsm.control].
+#'
+#' @param ...
+#'    Additional arguments to be passed to [rstpm2::stpm2].
+#'
 #' @return
 #'    An object of class `JointFPM` with the following elements:
 #'    \describe{
@@ -126,7 +132,9 @@ JointFPM <- function(surv,
                      tvc_re_terms = NULL,
                      tvc_ce_terms = NULL,
                      cluster,
-                     data){
+                     data,
+                     control = list(),
+                     ...){
 
   # Check user inputs ----------------------------------------------------------
 
@@ -264,7 +272,9 @@ JointFPM <- function(surv,
                        tvc.formula = tvc_formula,
                        cluster = data[[cluster]],
                        robust  = TRUE,
-                       data    = data)
+                       data    = data,
+                       control = control,
+                       ...)
 
   out <- list(model        = fpm,
               re_model     = re_model,
