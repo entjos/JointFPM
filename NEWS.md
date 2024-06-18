@@ -1,4 +1,7 @@
-# JointFPM (development version)
+# JointFPM 1.2.1
+
+- Added `summary.JointFPM()`, which provides a ncer overview of the model estimates
+- `predict.JointFPM()` includes new `control` and `...` arguments, which are passed to `rstpm2::gms()` and can be used to control the estimation procedure (pull request #12 by @ellessenne).
 
 # JointFPM 1.2.0
 - `predict.JointFP()` allows now to chose Gaussian quadrature instead of Romberg's method for the integration of the production of the survival and intensity function for estimating the mean number of events (@ellessenne, #8). Using Gaussian quadrature is fast while providing results similar to Romberg's method, if a sufficient number if nodes is chosen. This might be particular useful when standardising over linear covariates.
