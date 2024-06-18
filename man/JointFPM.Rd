@@ -15,7 +15,9 @@ JointFPM(
   tvc_re_terms = NULL,
   tvc_ce_terms = NULL,
   cluster,
-  data
+  data,
+  control = list(),
+  ...
 )
 }
 \arguments{
@@ -83,6 +85,10 @@ times and event indicator for the recurrent event, e.g.:
  4      0      6.07  0      1
  4      0      6.07  1      0
 }\if{html}{\out{</div>}}}
+
+\item{control}{List of arguments passed to \link[rstpm2:gsm.control]{rstpm2::gsm.control}.}
+
+\item{...}{Additional arguments to be passed to \link[rstpm2:gsm]{rstpm2::stpm2}.}
 }
 \value{
 An object of class \code{JointFPM} with the following elements:
