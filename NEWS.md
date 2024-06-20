@@ -1,3 +1,5 @@
+# JointFPM (development version)
+
 # JointFPM 1.2.1
 
 - Added `summary.JointFPM()`, which provides a ncer overview of the model estimates
