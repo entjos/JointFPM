@@ -1,8 +1,13 @@
 # JointFPM (development version)
 
+# JointFPM 1.2.2
+
+- The DESCRIPTION file now includes a link to the article in the Biometrical Journal describing the method implemented in this package.
+- The package now requieres R >= 4.1.0, due to the use of the native pipe operator. This fixes a note in the CRAN checks
+
 # JointFPM 1.2.1
 
-- Added `summary.JointFPM()`, which provides a ncer overview of the model estimates
+- Added `summary.JointFPM()`, which provides a nicer overview of the model estimates
 - `predict.JointFPM()` includes new `control` and `...` arguments, which are passed to `rstpm2::gms()` and can be used to control the estimation procedure (pull request #12 by @ellessenne).
 
 # JointFPM 1.2.0
