@@ -3,7 +3,7 @@ bibentry(
   title    = "Parametric Estimation of the Mean Number of Events in the Presence of Competing Risks",
   author   = c(person(c("Joshua", "P.")  , "Entrop"),
                person(c("Lasse", "H.")   , "Jakobsen"),
-               person(c("Michael", "J")  , "Crowther"),
+               person(c("Michael", "J.") , "Crowther"),
                person(c("Mark")          , "Clements"),
                person(c("Sandra")        , "Eloranta"),
                person(c("Caroline", "E."), "Dietrich")
