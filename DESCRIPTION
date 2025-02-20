@@ -13,20 +13,21 @@ Authors@R: c(person(given = "Joshua P.",
                     family = "Clements",
                     role   = "ctb"))
 Version: 1.2.1.9000
-Date: 2024-06-19
+Date: 2025-02-20
 Description: Implementation of a parametric joint model for modelling recurrent
-  and competing event processes using generalised survival models. The joint
-  model can subsequently be used to predict the mean number of events in the
+  and competing event processes using generalised survival models as described in
+  Entrop et al., (2005) <doi:10.1002/bimj.70038>. The joint  model can 
+  subsequently be used to predict the mean number of events in the
   presence of competing risks at different time points. Comparisons of the mean
   number of event functions, e.g. the differences in mean number of events
   between two exposure groups, are also available.
 URL: https://github.com/entjos/JointFPM,
-    https://entjos.github.io/JointFPM/
+     https://entjos.github.io/JointFPM/
 BugReports: https://github.com/entjos/JointFPM/issues
 License: CC BY 4.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.2
 Imports:
     rstpm2 (>= 1.5.2),
     survival (>= 3.2-13),
@@ -38,7 +39,7 @@ Imports:
     matrixStats,
     statmod
 Depends:
-  R (>= 4.0)
+  R (>= 4.1.0)
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
