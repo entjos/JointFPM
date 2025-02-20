@@ -1,4 +1,4 @@
-# JointFPM (development version)
+# JointFPM 1.2.2
 
 # JointFPM 1.2.2
 
