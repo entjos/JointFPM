@@ -1,42 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://entjos.github.io/JointFPM/404.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/index.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/reference/JointFPM-package.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/reference/JointFPM.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/reference/bladder1_stacked.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/reference/mean_no.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/reference/predict.JointFPM.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/reference/summary.JointFPM.html</loc>
-  </url>
-  <url>
-    <loc>https://entjos.github.io/JointFPM/reference/test_dfs_JointFPM.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://entjos.github.io/JointFPM/404.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/LICENSE.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/authors.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/index.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/news/index.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/reference/JointFPM-package.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/reference/JointFPM.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/reference/bladder1_stacked.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/reference/index.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/reference/mean_no.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/reference/predict.JointFPM.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/reference/summary.JointFPM.html</loc></url>
+<url><loc>https://entjos.github.io/JointFPM/reference/test_dfs_JointFPM.html</loc></url>
 </urlset>
+
