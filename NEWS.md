@@ -1,6 +1,8 @@
 # JointFPM (development version)
 
-# JointFPM 1.2.2
+# JointFPM 1.3.0
+
+- Stable release of `mean_no` function
 
 # JointFPM 1.2.2
 
