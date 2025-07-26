@@ -8,6 +8,7 @@ mean_no(
   formula,
   re_indicator,
   ce_indicator,
+  cluster,
   data,
   re_control = list(),
   ce_control = list()
@@ -21,6 +22,10 @@ to the risksets of the recurrent event process.}
 
 \item{ce_indicator}{The name of a variable indicating that these rows in the datasets belong
 to the riskset of the competing event process.}
+
+\item{cluster}{A character vector specifying the name of the variable that defines unique
+observations in the dataset passed to the function. This is only used
+for data checks}
 
 \item{data}{A \code{data.frame} in stacked format. The dataset needs to include one row
 for the competing event and one row for each risk episode of the
@@ -37,5 +42,18 @@ A \code{data.frame} including the estimated mean number of events \code{expn}
 at times \code{t} within strata \code{strata}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Estimates the mean number of events using the non-parametric estimator
+described by Cook and Lawless (1997).
+}
+\examples{
+library(survival)
+mean_no(Surv(time  = start,
+             time2 = stop,
+             event = event,
+             type  = 'counting') ~ pyridoxine + thiotepa,
+        re_indicator = "re",
+        ce_indicator = "ce",
+        cluster = "id",
+        data = bladder1_stacked)
+
 }
