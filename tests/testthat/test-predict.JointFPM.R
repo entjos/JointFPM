@@ -1,5 +1,5 @@
 test_that("Mean number of events in bladder did not change",{
-  expect_snapshot({
+  expect_all_equal({
     bldr_model <- JointFPM(Surv(time  = start,
                                 time2 = stop,
                                 event = event,
@@ -17,8 +17,9 @@ test_that("Mean number of events in bladder did not change",{
             newdata = data.frame(pyridoxine = 1,
                                  thiotepa   = 0),
             t       =  c(50),
-            ci_fit  = FALSE)
-  })
+            ci_fit  = FALSE)$fit
+  },
+  2.430327095)
 })
 
 test_that("Difference is correct",{
