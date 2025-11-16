@@ -1,5 +1,5 @@
 test_that("Mean number of events in bladder did not change",{
-  expect_all_equal({
+  expect_equal({
     bldr_model <- JointFPM(Surv(time  = start,
                                 time2 = stop,
                                 event = event,
