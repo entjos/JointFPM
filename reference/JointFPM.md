@@ -208,11 +208,11 @@ JointFPM(Surv(time  = start,
 #> 
 #> $re_model
 #> ~pyridoxine + thiotepa
-#> <environment: 0x55a0836fa300>
+#> <environment: 0x5641b8ba76a8>
 #> 
 #> $ce_model
 #> ~pyridoxine + thiotepa
-#> <environment: 0x55a0836fa300>
+#> <environment: 0x5641b8ba76a8>
 #> 
 #> $re_indicator
 #> [1] "re"
