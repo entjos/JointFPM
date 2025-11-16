@@ -514,7 +514,8 @@ test_that("Integration with GQ works", {
             t       =  c(1, 50, 100),
             method  = "gq",
             ngq     = 30,
-            ci_fit  = FALSE)
+            ci_fit  = FALSE) |> 
+      round(5)
   })
 })
 

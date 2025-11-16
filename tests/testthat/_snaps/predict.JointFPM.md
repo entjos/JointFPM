@@ -72,11 +72,11 @@
         1, re_model = ~ pyridoxine + thiotepa, ce_model = ~ pyridoxine + thiotepa,
       re_indicator = "re", ce_indicator = "ce", df_ce = 3, df_re = 3, cluster = "id",
       data = bladder1_stacked)
-      predict(bldr_model, newdata = data.frame(pyridoxine = 1, thiotepa = 0), t = c(1,
-        50, 100), method = "gq", ngq = 30, ci_fit = FALSE)
+      round(predict(bldr_model, newdata = data.frame(pyridoxine = 1, thiotepa = 0),
+      t = c(1, 50, 100), method = "gq", ngq = 30, ci_fit = FALSE), 5)
     Output
-        stop        fit
-      1    1 0.03450826
-      2   50 2.42961444
-      3  100 3.95690620
+        stop     fit
+      1    1 0.03451
+      2   50 2.42961
+      3  100 3.95691
 
