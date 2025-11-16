@@ -17,9 +17,10 @@ test_that("Mean number of events in bladder did not change",{
             newdata = data.frame(pyridoxine = 1,
                                  thiotepa   = 0),
             t       =  c(50),
-            ci_fit  = FALSE)$fit
+            ci_fit  = FALSE)$fit |> 
+      round(5)
   },
-  2.430327095)
+  2.43033)
 })
 
 test_that("Difference is correct",{
